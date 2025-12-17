@@ -1,58 +1,186 @@
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { Stethoscope, Pill } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+
+// Medical equipment images: monitors, devices, hospital equipment
+const equipmentImages = [
+  "https://fr.comen.com/assets/img/P01_c0d399ae.png",
+  "https://fr.comen.com/assets/img/P08_c371c056.png",
+  "https://fr.comen.com/assets/img/P10_b743465e.png",
+  "https://fr.comen.com/assets/img/AX900_0947a1cb.png",
+];
+
+// Consumable images: gloves, syringes, gauze, medical supplies
+const consumableImages = [
+  "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=800",
+  "https://images.unsplash.com/photo-1583947581924-860bda6a26df?q=80&w=800",
+  "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=800",
+  "https://images.unsplash.com/photo-1603398938378-e54eab446dde?q=80&w=800",
+];
 
 interface HeroCategoryProps {
   type: "equipment" | "consumables";
 }
 
 const HeroCategory = ({ type }: HeroCategoryProps) => {
-  const content = {
-    equipment: {
-      title: "Équipements Médicaux",
-      subtitle: "Matériel professionnel certifié CE",
-      description: "Découvrez notre gamme complète d'équipements médicaux de haute qualité",
-      link: "/equipements",
-      image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1200",
-    },
-    consumables: {
-      title: "Consommables",
-      subtitle: "Fournitures médicales essentielles",
-      description: "Large sélection de consommables pour tous vos besoins quotidiens",
-      link: "/catalogue?category=consommables",
-      image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?q=80&w=1200",
-    },
-  };
+  const [isHovered, setIsHovered] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const data = content[type];
+  const isEquipment = type === "equipment";
+  const images = isEquipment ? equipmentImages : consumableImages;
+  const title = isEquipment ? "Équipements Médicaux" : "Consommables Médicaux";
+  const link = isEquipment ? "/catalogue?category=equipements_medicaux" : "/catalogue?category=consommables";
+  const Icon = isEquipment ? Stethoscope : Pill;
+
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Embla carousel for mobile with autoplay
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true, dragFree: false },
+    [Autoplay({ delay: 3000, stopOnInteraction: false })]
+  );
+
+  // Sync embla index with currentIndex
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrentIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on("select", onSelect);
+    onSelect();
+  }, [emblaApi, onSelect]);
+
+  // Desktop hover carousel
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isMobile) return;
+    
+    if (isHovered) {
+      intervalRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % images.length);
+      }, 1500);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      setCurrentIndex(0);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isHovered, images.length, isMobile]);
 
   return (
     <Link
-      to={data.link}
-      className="relative flex-1 min-h-[50vh] md:min-h-[70vh] overflow-hidden group"
+      to={link}
+      className="relative flex-1 min-h-[300px] md:min-h-[500px] overflow-hidden group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-        style={{ backgroundImage: `url(${data.image})` }}
-      />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50 group-hover:bg-black/40 transition-colors duration-500" />
-      
+      {/* Background Images */}
+      <div className="absolute inset-0">
+        {isMobile ? (
+          // Mobile: Embla Carousel with swipe
+          <div className="h-full overflow-hidden" ref={emblaRef}>
+            <div className="flex h-full">
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className="flex-[0_0_100%] min-w-0 h-full relative"
+                >
+                  <img
+                    src={img}
+                    alt=""
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          // Desktop: Fade transition on hover
+          images.map((img, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                index === currentIndex ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <img
+                src={img}
+                alt=""
+                className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+              />
+            </div>
+          ))
+        )}
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-foreground/60 group-hover:bg-foreground/50 transition-colors duration-300" />
+      </div>
+
       {/* Content */}
-      <div className="relative h-full flex flex-col items-center justify-center text-center p-8 z-10">
-        <span className="text-sm uppercase tracking-widest text-white/70 mb-3">
-          {data.subtitle}
-        </span>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
-          {data.title}
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-6 md:p-8">
+        {/* Icon */}
+        <div className="mb-4 md:mb-6 p-3 md:p-4 rounded-full bg-background/10 backdrop-blur-sm border border-background/20 group-hover:scale-110 transition-transform duration-300">
+          <Icon className="h-10 w-10 md:h-16 md:w-16 text-background" strokeWidth={1.5} />
+        </div>
+
+        {/* Title */}
+        <h2 className="text-xl md:text-4xl lg:text-5xl font-semibold text-background tracking-tight mb-3 md:mb-4">
+          {title}
         </h2>
-        <p className="text-white/80 max-w-md mb-6 text-sm md:text-base">
-          {data.description}
-        </p>
-        <div className="inline-flex items-center gap-2 text-white font-medium group-hover:gap-3 transition-all">
-          Explorer
-          <ArrowRight className="h-5 w-5" />
+
+        {/* CTA */}
+        <span className="inline-flex items-center text-background/80 text-sm md:text-base font-medium group-hover:text-background transition-colors">
+          Découvrir la collection
+          <svg
+            className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </span>
+
+        {/* Carousel Indicators */}
+        <div className="absolute bottom-4 md:bottom-6 flex gap-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={(e) => {
+                e.preventDefault();
+                if (isMobile && emblaApi) {
+                  emblaApi.scrollTo(index);
+                } else {
+                  setCurrentIndex(index);
+                }
+              }}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? "bg-background w-6" 
+                  : "bg-background/40 w-2 hover:bg-background/60"
+              }`}
+              aria-label={`Image ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
     </Link>
