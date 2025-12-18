@@ -58,7 +58,7 @@ const Catalogue = () => {
 
   const categoryLabels: Record<string, string> = {
     equipements_dentaires: "Équipements Dentaires",
-    consommables: "Consommables Dentaires",
+    consommables_dentaires: "Consommables Dentaires",
   };
 
   return (
