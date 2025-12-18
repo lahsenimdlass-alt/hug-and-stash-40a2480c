@@ -39,7 +39,7 @@ const AdminDashboard = () => {
 
   const navItems = [
     { icon: BarChart3, label: "Statistiques", path: "/admin/dashboard" },
-    { icon: Package, label: "Produits", path: "/admin/dashboard/products" },
+    { icon: Package, label: "Produits Dentaires", path: "/admin/dashboard/products" },
     { icon: ShoppingCart, label: "Commandes", path: "/admin/dashboard/orders" },
     { icon: Percent, label: "Promotions", path: "/admin/dashboard/promotions" },
   ];
@@ -54,10 +54,10 @@ const AdminDashboard = () => {
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-8 w-8 bg-foreground flex items-center justify-center">
-            <span className="text-background font-bold text-sm">AM</span>
+          <div className="h-8 w-8 bg-primary flex items-center justify-center rounded">
+            <span className="text-primary-foreground font-bold text-sm">AMD</span>
           </div>
-          <span className="font-bold">Admin</span>
+          <span className="font-bold">AllMedicalDental</span>
         </div>
         <Button variant="ghost" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -73,12 +73,13 @@ const AdminDashboard = () => {
           {/* Logo */}
           <div className="p-6 border-b hidden lg:block">
             <Link to="/" className="flex items-center gap-2">
-              <div className="h-10 w-10 bg-foreground flex items-center justify-center">
-                <span className="text-background font-bold text-xl">AM</span>
+              <div className="h-10 w-10 bg-primary flex items-center justify-center rounded">
+                <span className="text-primary-foreground font-bold text-lg">AMD</span>
               </div>
-              <span className="text-xl font-bold">
-                Admin
-              </span>
+              <div className="flex flex-col">
+                <span className="text-lg font-bold leading-tight">AllMedicalDental</span>
+                <span className="text-xs text-muted-foreground">Administration</span>
+              </div>
             </Link>
           </div>
 
