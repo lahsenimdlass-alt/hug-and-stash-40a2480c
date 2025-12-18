@@ -15,7 +15,7 @@ const Navigation = () => {
     },
     {
       name: "Consommables Dentaires",
-      link: "/catalogue?category=consommables",
+      link: "/catalogue?category=consommables_dentaires",
       subcategories: ["Composites", "Empreintes", "Anesthésie", "Hygiène", "Prothèse", "Orthodontie"]
     }
   ];
