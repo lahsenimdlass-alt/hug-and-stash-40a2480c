@@ -132,7 +132,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
           ))
         )}
         {/* Overlay */}
-        <div className="absolute inset-0 bg-primary/70 group-hover:bg-primary/60 transition-colors duration-300" />
+        <div className="absolute inset-0 bg-foreground/60 group-hover:bg-foreground/50 transition-colors duration-300" />
       </div>
 
       {/* Content */}
