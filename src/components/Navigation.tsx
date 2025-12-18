@@ -90,6 +90,9 @@ const Navigation = () => {
             <Link to="/promotions" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
               Promotions
             </Link>
+            <Link to="/sav" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
+              SAV
+            </Link>
           </nav>
 
           {/* Search bar */}
@@ -163,10 +166,17 @@ const Navigation = () => {
                   </Link>
                   <Link
                     to="/promotions"
-                    className="py-3 text-sm font-medium"
+                    className="py-3 text-sm font-medium border-b border-border"
                     onClick={() => setIsOpen(false)}
                   >
                     Promotions
+                  </Link>
+                  <Link
+                    to="/sav"
+                    className="py-3 text-sm font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    SAV
                   </Link>
                 </nav>
               </SheetContent>
