@@ -35,12 +35,12 @@ const AdminLogin = () => {
     <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 bg-foreground flex items-center justify-center">
-            <span className="text-background font-bold text-xl">AM</span>
+          <div className="mx-auto mb-4 h-12 w-12 bg-primary flex items-center justify-center rounded">
+            <span className="text-primary-foreground font-bold text-xl">AMD</span>
           </div>
-          <CardTitle className="text-2xl">Administration</CardTitle>
+          <CardTitle className="text-2xl">AllMedicalDental</CardTitle>
           <CardDescription>
-            Connectez-vous pour accéder au tableau de bord
+            Connectez-vous pour accéder à l'administration
           </CardDescription>
         </CardHeader>
         <CardContent>
