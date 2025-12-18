@@ -9,14 +9,14 @@ const Navigation = () => {
 
   const categories = [
     {
-      name: "Équipements Médicaux",
-      link: "/catalogue?category=equipements_medicaux",
-      subcategories: ["Diagnostic", "Monitoring", "Urgence", "Mobilité", "Imagerie", "Chirurgie"]
+      name: "Équipements Dentaires",
+      link: "/catalogue?category=equipements_dentaires",
+      subcategories: ["Fauteuils", "Units dentaires", "Imagerie", "Stérilisation", "Chirurgie", "Endodontie"]
     },
     {
-      name: "Consommables",
+      name: "Consommables Dentaires",
       link: "/catalogue?category=consommables",
-      subcategories: ["Protection", "Désinfection", "Gants", "Masques", "Seringues", "Pansements"]
+      subcategories: ["Composites", "Empreintes", "Anesthésie", "Hygiène", "Prothèse", "Orthodontie"]
     }
   ];
 
@@ -50,11 +50,11 @@ const Navigation = () => {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="h-9 w-9 bg-foreground flex items-center justify-center">
-              <span className="text-background font-bold text-lg">AM</span>
+            <div className="h-9 w-9 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-lg">AD</span>
             </div>
             <span className="hidden sm:inline text-lg font-semibold text-foreground tracking-tight">
-              All Medical
+              AllMedicalDental
             </span>
           </Link>
 

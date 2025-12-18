@@ -9,18 +9,18 @@ const Promotions = () => {
   const promos = [
     {
       id: 1,
-      name: "Pack Diagnostic Complet",
-      category: "Équipement médical",
-      originalPrice: "899.00",
-      discountedPrice: "699.00",
-      discount: "-22%",
-      image: "https://images.unsplash.com/photo-1584362917165-526a968579e8?q=80&w=800",
+      name: "Fauteuil Dentaire Électrique Pro",
+      category: "Équipement dentaire",
+      originalPrice: "5999.00",
+      discountedPrice: "4499.00",
+      discount: "-25%",
+      image: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=800",
       endsIn: "3 jours"
     },
     {
       id: 2,
       name: "Kit Instruments Dentaires Premium",
-      category: "Matériel dentaire",
+      category: "Instrumentation",
       originalPrice: "1299.00",
       discountedPrice: "999.00",
       discount: "-23%",
@@ -29,41 +29,41 @@ const Promotions = () => {
     },
     {
       id: 3,
-      name: "Lot Consommables Protection x100",
+      name: "Composite Dentaire Universal Kit",
       category: "Consommables",
       originalPrice: "299.00",
       discountedPrice: "199.00",
       discount: "-33%",
-      image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?q=80&w=800",
+      image: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=800",
       endsIn: "7 jours"
     },
     {
       id: 4,
-      name: "Tensiomètre Digital Pro",
-      category: "Monitoring",
-      originalPrice: "249.00",
-      discountedPrice: "179.00",
-      discount: "-28%",
-      image: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?q=80&w=800",
+      name: "Lampe à Polymériser LED",
+      category: "Équipement",
+      originalPrice: "599.00",
+      discountedPrice: "449.00",
+      discount: "-25%",
+      image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=800",
       endsIn: "2 jours"
     },
     {
       id: 5,
-      name: "Fauteuil Dentaire Électrique",
-      category: "Mobilier",
-      originalPrice: "3999.00",
-      discountedPrice: "2999.00",
-      discount: "-25%",
-      image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=800",
+      name: "Unit Dentaire Complet",
+      category: "Équipement dentaire",
+      originalPrice: "12999.00",
+      discountedPrice: "9999.00",
+      discount: "-23%",
+      image: "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?q=80&w=800",
       endsIn: "10 jours"
     },
     {
       id: 6,
-      name: "Stérilisateur Autoclave",
-      category: "Hygiène",
-      originalPrice: "1899.00",
-      discountedPrice: "1499.00",
-      discount: "-21%",
+      name: "Autoclave Classe B 18L",
+      category: "Stérilisation",
+      originalPrice: "2499.00",
+      discountedPrice: "1899.00",
+      discount: "-24%",
       image: "https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?q=80&w=800",
       endsIn: "4 jours"
     }
@@ -86,7 +86,7 @@ const Promotions = () => {
                 Profitez de nos offres exceptionnelles
               </h1>
               <p className="text-lg text-muted-foreground">
-                Découvrez nos promotions sur une sélection d'équipements médicaux et dentaires. 
+                Découvrez nos promotions sur une sélection d'équipements et consommables dentaires. 
                 Offres limitées dans le temps !
               </p>
             </div>
