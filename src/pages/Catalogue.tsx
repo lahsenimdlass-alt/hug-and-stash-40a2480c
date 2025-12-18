@@ -6,80 +6,46 @@ import { Loader2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Product {
   id: string;
   title: string;
   description: string | null;
   price: number;
-  category: "equipements_dentaires" | "consommables";
+  category: string;
   image_url: string | null;
   stock_quantity: number;
   is_active: boolean;
 }
 
-// Mock data for dental products
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    title: "Fauteuil Dentaire Électrique",
-    description: "Fauteuil dentaire ergonomique avec réglages électriques multiples",
-    price: 4999.00,
-    category: "equipements_dentaires",
-    image_url: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=800",
-    stock_quantity: 5,
-    is_active: true
-  },
-  {
-    id: "2",
-    title: "Kit Instruments Dentaires Premium",
-    description: "Ensemble complet d'instruments dentaires en acier inoxydable",
-    price: 1299.00,
-    category: "equipements_dentaires",
-    image_url: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=800",
-    stock_quantity: 8,
-    is_active: true
-  },
-  {
-    id: "3",
-    title: "Composite Dentaire Universal",
-    description: "Kit composite photopolymérisable toutes teintes",
-    price: 189.00,
-    category: "consommables",
-    image_url: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=800",
-    stock_quantity: 50,
-    is_active: true
-  },
-  {
-    id: "4",
-    title: "Lampe à Polymériser LED",
-    description: "Lampe LED haute puissance pour photopolymérisation",
-    price: 449.00,
-    category: "equipements_dentaires",
-    image_url: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=800",
-    stock_quantity: 15,
-    is_active: true
-  }
-];
-
 const Catalogue = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
-  const category = searchParams.get("category") as "equipements_dentaires" | "consommables" | null;
+  const category = searchParams.get("category");
 
   useEffect(() => {
-    // Simulate loading with mock data
     const fetchProducts = async () => {
       try {
-        await new Promise(resolve => setTimeout(resolve, 500));
+        let query = supabase
+          .from("products")
+          .select("*")
+          .eq("is_active", true)
+          .order("created_at", { ascending: false });
         
-        let filteredProducts = mockProducts.filter(p => p.is_active);
-        if (category && (category === "equipements_dentaires" || category === "consommables")) {
-          filteredProducts = filteredProducts.filter(p => p.category === category);
+        if (category) {
+          query = query.eq("category", category);
         }
         
-        setProducts(filteredProducts);
+        const { data, error } = await query;
+        
+        if (error) {
+          console.error("Error fetching products:", error);
+          return;
+        }
+        
+        setProducts(data || []);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
