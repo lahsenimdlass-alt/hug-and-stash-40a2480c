@@ -10,6 +10,7 @@ import Catalogue from "./pages/Catalogue";
 import DemandeDevis from "./pages/DemandeDevis";
 import Distributeurs from "./pages/Distributeurs";
 import Promotions from "./pages/Promotions";
+import SAV from "./pages/SAV";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/demande-devis" element={<DemandeDevis />} />
             <Route path="/distributeurs" element={<Distributeurs />} />
             <Route path="/promotions" element={<Promotions />} />
+            <Route path="/sav" element={<SAV />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />}>
               <Route index element={<AdminStats />} />
