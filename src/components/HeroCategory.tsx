@@ -1,23 +1,23 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Stethoscope, Pill } from "lucide-react";
+import { Armchair, Syringe } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
-// Medical equipment images: monitors, devices, hospital equipment
+// Dental equipment images: chairs, units, x-ray machines
 const equipmentImages = [
-  "https://fr.comen.com/assets/img/P01_c0d399ae.png",
-  "https://fr.comen.com/assets/img/P08_c371c056.png",
-  "https://fr.comen.com/assets/img/P10_b743465e.png",
-  "https://fr.comen.com/assets/img/AX900_0947a1cb.png",
+  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=800",
+  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=800",
+  "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=800",
+  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?q=80&w=800",
 ];
 
-// Consumable images: gloves, syringes, gauze, medical supplies
+// Dental consumables images: instruments, materials
 const consumableImages = [
-  "https://images.unsplash.com/photo-1584017911766-d451b3d0e843?q=80&w=800",
-  "https://images.unsplash.com/photo-1583947581924-860bda6a26df?q=80&w=800",
-  "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=800",
-  "https://images.unsplash.com/photo-1603398938378-e54eab446dde?q=80&w=800",
+  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=800",
+  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800",
+  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=800",
+  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?q=80&w=800",
 ];
 
 interface HeroCategoryProps {
@@ -31,9 +31,9 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
 
   const isEquipment = type === "equipment";
   const images = isEquipment ? equipmentImages : consumableImages;
-  const title = isEquipment ? "Équipements Médicaux" : "Consommables Médicaux";
-  const link = isEquipment ? "/catalogue?category=equipements_medicaux" : "/catalogue?category=consommables";
-  const Icon = isEquipment ? Stethoscope : Pill;
+  const title = isEquipment ? "Équipements Dentaires" : "Consommables Dentaires";
+  const link = isEquipment ? "/catalogue?category=equipements_dentaires" : "/catalogue?category=consommables";
+  const Icon = isEquipment ? Armchair : Syringe;
 
   // Check if mobile
   useEffect(() => {
@@ -132,23 +132,23 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
           ))
         )}
         {/* Overlay */}
-        <div className="absolute inset-0 bg-foreground/60 group-hover:bg-foreground/50 transition-colors duration-300" />
+        <div className="absolute inset-0 bg-primary/70 group-hover:bg-primary/60 transition-colors duration-300" />
       </div>
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center p-6 md:p-8">
         {/* Icon */}
         <div className="mb-4 md:mb-6 p-3 md:p-4 rounded-full bg-background/10 backdrop-blur-sm border border-background/20 group-hover:scale-110 transition-transform duration-300">
-          <Icon className="h-10 w-10 md:h-16 md:w-16 text-background" strokeWidth={1.5} />
+          <Icon className="h-10 w-10 md:h-16 md:w-16 text-primary-foreground" strokeWidth={1.5} />
         </div>
 
         {/* Title */}
-        <h2 className="text-xl md:text-4xl lg:text-5xl font-semibold text-background tracking-tight mb-3 md:mb-4">
+        <h2 className="text-xl md:text-4xl lg:text-5xl font-semibold text-primary-foreground tracking-tight mb-3 md:mb-4">
           {title}
         </h2>
 
         {/* CTA */}
-        <span className="inline-flex items-center text-background/80 text-sm md:text-base font-medium group-hover:text-background transition-colors">
+        <span className="inline-flex items-center text-primary-foreground/80 text-sm md:text-base font-medium group-hover:text-primary-foreground transition-colors">
           Découvrir la collection
           <svg
             className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"
@@ -175,8 +175,8 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
               }}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === currentIndex 
-                  ? "bg-background w-6" 
-                  : "bg-background/40 w-2 hover:bg-background/60"
+                  ? "bg-primary-foreground w-6" 
+                  : "bg-primary-foreground/40 w-2 hover:bg-primary-foreground/60"
               }`}
               aria-label={`Image ${index + 1}`}
             />

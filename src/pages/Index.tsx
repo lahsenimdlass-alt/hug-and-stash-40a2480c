@@ -64,12 +64,12 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-semibold mb-6 tracking-tight">
-                Votre partenaire en matériel médical
+                Votre partenaire en équipement dentaire
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-                All Medical distribue une gamme complète d'équipements et de consommables médicaux 
-                de haute qualité. Notre engagement : vous fournir les meilleurs produits avec un 
-                service irréprochable.
+                AllMedicalDental distribue une gamme complète d'équipements et de consommables dentaires 
+                de haute qualité. Notre engagement : équiper votre cabinet dentaire avec les meilleurs 
+                produits et un service irréprochable.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button asChild size="lg" className="rounded-full">
@@ -87,20 +87,20 @@ const Index = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-foreground">
+        <section className="py-20 bg-primary">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold text-background mb-4 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-semibold text-primary-foreground mb-4 tracking-tight">
               Besoin d'un devis personnalisé ?
             </h2>
-            <p className="text-background/70 mb-8 max-w-xl mx-auto">
-              Notre équipe d'experts vous accompagne pour trouver les solutions 
-              adaptées à vos besoins spécifiques.
+            <p className="text-primary-foreground/70 mb-8 max-w-xl mx-auto">
+              Notre équipe d'experts vous accompagne pour équiper votre cabinet dentaire 
+              avec les solutions adaptées à vos besoins.
             </p>
             <Button 
               asChild 
               size="lg" 
               variant="secondary" 
-              className="rounded-full bg-background text-foreground hover:bg-background/90"
+              className="rounded-full"
             >
               <Link to="/demande-devis">
                 Demander un devis

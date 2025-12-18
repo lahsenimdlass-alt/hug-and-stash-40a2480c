@@ -12,52 +12,52 @@ interface Product {
   title: string;
   description: string | null;
   price: number;
-  category: "equipements_medicaux" | "consommables";
+  category: "equipements_dentaires" | "consommables";
   image_url: string | null;
   stock_quantity: number;
   is_active: boolean;
 }
 
-// Mock data for now - will be replaced with Supabase
+// Mock data for dental products
 const mockProducts: Product[] = [
   {
     id: "1",
-    title: "Tensiomètre Digital Pro",
-    description: "Tensiomètre professionnel avec affichage digital HD",
-    price: 249.00,
-    category: "equipements_medicaux",
-    image_url: "https://images.unsplash.com/photo-1615461066841-6116e61058f4?q=80&w=800",
-    stock_quantity: 15,
+    title: "Fauteuil Dentaire Électrique",
+    description: "Fauteuil dentaire ergonomique avec réglages électriques multiples",
+    price: 4999.00,
+    category: "equipements_dentaires",
+    image_url: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=800",
+    stock_quantity: 5,
     is_active: true
   },
   {
     id: "2",
-    title: "Kit Instruments Dentaires",
-    description: "Ensemble complet d'instruments dentaires premium",
+    title: "Kit Instruments Dentaires Premium",
+    description: "Ensemble complet d'instruments dentaires en acier inoxydable",
     price: 1299.00,
-    category: "equipements_medicaux",
+    category: "equipements_dentaires",
     image_url: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=800",
     stock_quantity: 8,
     is_active: true
   },
   {
     id: "3",
-    title: "Gants d'examen x100",
-    description: "Boîte de 100 gants d'examen en latex",
-    price: 29.90,
+    title: "Composite Dentaire Universal",
+    description: "Kit composite photopolymérisable toutes teintes",
+    price: 189.00,
     category: "consommables",
-    image_url: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?q=80&w=800",
-    stock_quantity: 200,
+    image_url: "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=800",
+    stock_quantity: 50,
     is_active: true
   },
   {
     id: "4",
-    title: "Stéthoscope Premium",
-    description: "Stéthoscope acoustique haute performance",
-    price: 189.00,
-    category: "equipements_medicaux",
-    image_url: "https://images.unsplash.com/photo-1584362917165-526a968579e8?q=80&w=800",
-    stock_quantity: 25,
+    title: "Lampe à Polymériser LED",
+    description: "Lampe LED haute puissance pour photopolymérisation",
+    price: 449.00,
+    category: "equipements_dentaires",
+    image_url: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=800",
+    stock_quantity: 15,
     is_active: true
   }
 ];
@@ -66,7 +66,7 @@ const Catalogue = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
-  const category = searchParams.get("category") as "equipements_medicaux" | "consommables" | null;
+  const category = searchParams.get("category") as "equipements_dentaires" | "consommables" | null;
 
   useEffect(() => {
     // Simulate loading with mock data
@@ -75,7 +75,7 @@ const Catalogue = () => {
         await new Promise(resolve => setTimeout(resolve, 500));
         
         let filteredProducts = mockProducts.filter(p => p.is_active);
-        if (category && (category === "equipements_medicaux" || category === "consommables")) {
+        if (category && (category === "equipements_dentaires" || category === "consommables")) {
           filteredProducts = filteredProducts.filter(p => p.category === category);
         }
         
@@ -91,8 +91,8 @@ const Catalogue = () => {
   }, [category]);
 
   const categoryLabels: Record<string, string> = {
-    equipements_medicaux: "Équipements Médicaux",
-    consommables: "Consommables",
+    equipements_dentaires: "Équipements Dentaires",
+    consommables: "Consommables Dentaires",
   };
 
   return (
@@ -105,7 +105,7 @@ const Catalogue = () => {
             {category ? categoryLabels[category] || "Catalogue Produits" : "Catalogue Produits"}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Découvrez notre sélection complète de matériel médical et dentaire de qualité professionnelle
+            Découvrez notre sélection complète d'équipements et consommables dentaires de qualité professionnelle
           </p>
         </div>
 
