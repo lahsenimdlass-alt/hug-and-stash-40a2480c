@@ -4,12 +4,18 @@ import { Armchair, Syringe } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
+// Import equipment images
+import equipment1 from "@/assets/equipment-1.jpg";
+import equipment2 from "@/assets/equipment-2.jpg";
+import equipment3 from "@/assets/equipment-3.jpg";
+import equipment4 from "@/assets/equipment-4.jpg";
+
 // Dental equipment images: chairs, units, x-ray machines
 const equipmentImages = [
-  "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=800",
-  "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=800",
-  "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?q=80&w=800",
-  "https://images.unsplash.com/photo-1598256989800-fe5f95da9787?q=80&w=800",
+  equipment1,
+  equipment2,
+  equipment3,
+  equipment4,
 ];
 
 // Dental consumables images: instruments, materials
