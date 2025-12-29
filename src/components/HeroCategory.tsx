@@ -10,6 +10,12 @@ import equipment2 from "@/assets/equipment-2.jpg";
 import equipment3 from "@/assets/equipment-3.jpg";
 import equipment4 from "@/assets/equipment-4.jpg";
 
+// Import consumable images
+import consumable1 from "@/assets/consumable-1.jpg";
+import consumable2 from "@/assets/consumable-2.jpg";
+import consumable3 from "@/assets/consumable-3.jpg";
+import consumable4 from "@/assets/consumable-4.jpg";
+
 // Dental equipment images: chairs, units, x-ray machines
 const equipmentImages = [
   equipment1,
@@ -20,10 +26,10 @@ const equipmentImages = [
 
 // Dental consumables images: instruments, materials
 const consumableImages = [
-  "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?q=80&w=800",
-  "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=800",
-  "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=800",
-  "https://images.unsplash.com/photo-1571772996211-2f02c9727629?q=80&w=800",
+  consumable1,
+  consumable2,
+  consumable3,
+  consumable4,
 ];
 
 interface HeroCategoryProps {
