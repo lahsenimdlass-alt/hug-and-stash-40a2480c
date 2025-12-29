@@ -106,7 +106,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Background Images */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-muted">
         {isMobile ? (
           // Mobile: Embla Carousel with swipe
           <div className="h-full overflow-hidden" ref={emblaRef}>
@@ -119,7 +119,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
                   <img
                     src={img}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     loading="lazy"
                   />
                 </div>
@@ -138,7 +138,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
               <img
                 src={img}
                 alt=""
-                className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+                className="w-full h-full object-contain scale-100 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
           ))
