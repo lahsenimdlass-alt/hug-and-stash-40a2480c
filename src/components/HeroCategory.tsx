@@ -38,7 +38,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
   const isEquipment = type === "equipment";
   const images = isEquipment ? equipmentImages : consumableImages;
   const title = isEquipment ? "Équipements Dentaires" : "Consommables Dentaires";
-  const link = isEquipment ? "/catalogue?category=equipements_dentaires" : "/catalogue?category=consommables_dentaires";
+  const link = isEquipment ? "/equipements" : "/consommables";
   const Icon = isEquipment ? Armchair : Syringe;
 
   // Check if mobile
