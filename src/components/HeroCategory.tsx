@@ -106,7 +106,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Background Images */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 bg-muted">
         {isMobile ? (
           // Mobile: Embla Carousel with swipe
           <div className="h-full overflow-hidden" ref={emblaRef}>
@@ -116,10 +116,18 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
                   key={index}
                   className="flex-[0_0_100%] min-w-0 h-full relative"
                 >
+                  {/* Blurred background to fill empty space */}
                   <img
                     src={img}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-60"
+                    loading="lazy"
+                  />
+                  {/* Main image - fully visible */}
+                  <img
+                    src={img}
+                    alt=""
+                    className="relative w-full h-full object-contain"
                     loading="lazy"
                   />
                 </div>
@@ -135,10 +143,17 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
                 index === currentIndex ? "opacity-100" : "opacity-0"
               }`}
             >
+              {/* Blurred background to fill empty space */}
               <img
                 src={img}
                 alt=""
-                className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
+                className="absolute inset-0 w-full h-full object-cover blur-xl scale-110 opacity-60"
+              />
+              {/* Main image - fully visible */}
+              <img
+                src={img}
+                alt=""
+                className="relative w-full h-full object-contain scale-100 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
           ))
