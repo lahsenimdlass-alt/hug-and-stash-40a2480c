@@ -8,9 +8,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold tracking-tight">
-              AllMedical<span className="text-primary-foreground/80">Dental</span>
-            </h3>
+            <Link to="/">
+              <img 
+                src="/logo.png" 
+                alt="All Medical Dental" 
+                className="h-16 w-auto brightness-0 invert"
+              />
+            </Link>
             <p className="text-primary-foreground/70 text-sm leading-relaxed">
               Votre partenaire de confiance pour l'équipement dentaire professionnel depuis 2009.
             </p>
