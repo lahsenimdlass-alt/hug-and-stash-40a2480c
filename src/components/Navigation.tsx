@@ -3,20 +3,21 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Search, User, Phone } from "lucide-react";
+import { equipmentCategories, consumableCategories } from "@/data/categories";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const categories = [
     {
-      name: "Équipements Dentaires",
-      link: "/catalogue?category=equipements_dentaires",
-      subcategories: ["Fauteuils", "Units dentaires", "Imagerie", "Stérilisation", "Chirurgie", "Endodontie"]
+      name: "Équipements",
+      link: "/equipements",
+      subcategories: equipmentCategories.map(cat => ({ name: cat.name, slug: cat.slug }))
     },
     {
-      name: "Consommables Dentaires",
-      link: "/catalogue?category=consommables_dentaires",
-      subcategories: ["Composites", "Empreintes", "Anesthésie", "Hygiène", "Prothèse", "Orthodontie"]
+      name: "Consommables",
+      link: "/consommables",
+      subcategories: consumableCategories.map(cat => ({ name: cat.name, slug: cat.slug }))
     }
   ];
 
@@ -66,14 +67,14 @@ const Navigation = () => {
                 >
                   {category.name}
                 </Link>
-                <div className="absolute left-0 top-full mt-2 w-44 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-background border border-border shadow-lg py-2">
+                <div className="absolute left-0 top-full mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-background border border-border shadow-lg py-2 max-h-80 overflow-y-auto">
                   {category.subcategories.map((sub) => (
                     <Link
-                      key={sub}
-                      to={`/catalogue?category=${encodeURIComponent(category.name)}&sub=${encodeURIComponent(sub)}`}
+                      key={sub.slug}
+                      to={`${category.link}/${sub.slug}`}
                       className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                     >
-                      {sub}
+                      {sub.name}
                     </Link>
                   ))}
                 </div>
@@ -141,12 +142,12 @@ const Navigation = () => {
                       <div className="pl-4 space-y-1">
                         {category.subcategories.map((sub) => (
                           <Link
-                            key={sub}
-                            to={`/catalogue?category=${encodeURIComponent(category.name)}&sub=${encodeURIComponent(sub)}`}
+                            key={sub.slug}
+                            to={`${category.link}/${sub.slug}`}
                             className="block py-2 text-sm text-muted-foreground"
                             onClick={() => setIsOpen(false)}
                           >
-                            {sub}
+                            {sub.name}
                           </Link>
                         ))}
                       </div>
