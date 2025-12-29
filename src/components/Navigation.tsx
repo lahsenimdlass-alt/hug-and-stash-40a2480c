@@ -49,13 +49,8 @@ const Navigation = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="h-9 w-9 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">AD</span>
-            </div>
-            <span className="hidden sm:inline text-lg font-semibold text-foreground tracking-tight">
-              AllMedicalDental
-            </span>
+          <Link to="/" className="flex items-center">
+            <img src="/logo.png" alt="All Dental" className="h-12 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
