@@ -2,87 +2,88 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design system - Sky blue medical/dental theme */
+/* Design system - AMD Blue medical/dental theme */
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 200 50% 15%;
+    --foreground: 210 45% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 200 50% 15%;
+    --card-foreground: 210 45% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 200 50% 15%;
+    --popover-foreground: 210 45% 20%;
 
-    --primary: 197 71% 52%;
+    /* AMD Logo Blue: #3B7BBF → HSL 210 52% 49% */
+    --primary: 210 52% 49%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 197 30% 94%;
-    --secondary-foreground: 200 50% 15%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 210 45% 20%;
 
-    --muted: 197 20% 96%;
-    --muted-foreground: 200 20% 45%;
+    --muted: 210 25% 96%;
+    --muted-foreground: 210 20% 45%;
 
-    --accent: 197 30% 94%;
-    --accent-foreground: 200 50% 15%;
+    --accent: 210 40% 94%;
+    --accent-foreground: 210 45% 20%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 197 20% 90%;
-    --input: 197 20% 90%;
-    --ring: 197 71% 52%;
+    --border: 210 25% 90%;
+    --input: 210 25% 90%;
+    --ring: 210 52% 49%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 197 30% 98%;
-    --sidebar-foreground: 200 30% 25%;
-    --sidebar-primary: 197 71% 52%;
+    --sidebar-background: 210 30% 98%;
+    --sidebar-foreground: 210 30% 25%;
+    --sidebar-primary: 210 52% 49%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 197 30% 95%;
-    --sidebar-accent-foreground: 200 50% 15%;
-    --sidebar-border: 197 20% 91%;
-    --sidebar-ring: 197 40% 60%;
+    --sidebar-accent: 210 30% 95%;
+    --sidebar-accent-foreground: 210 45% 20%;
+    --sidebar-border: 210 25% 91%;
+    --sidebar-ring: 210 45% 55%;
   }
 
   .dark {
-    --background: 200 30% 8%;
-    --foreground: 197 20% 98%;
+    --background: 210 35% 8%;
+    --foreground: 210 20% 98%;
 
-    --card: 200 30% 12%;
-    --card-foreground: 197 20% 98%;
+    --card: 210 35% 12%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 200 30% 12%;
-    --popover-foreground: 197 20% 98%;
+    --popover: 210 35% 12%;
+    --popover-foreground: 210 20% 98%;
 
-    --primary: 197 71% 52%;
+    --primary: 210 52% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 200 30% 18%;
-    --secondary-foreground: 197 20% 98%;
+    --secondary: 210 35% 18%;
+    --secondary-foreground: 210 20% 98%;
 
-    --muted: 200 30% 18%;
-    --muted-foreground: 197 20% 65%;
+    --muted: 210 35% 18%;
+    --muted-foreground: 210 20% 65%;
 
-    --accent: 200 30% 18%;
-    --accent-foreground: 197 20% 98%;
+    --accent: 210 35% 18%;
+    --accent-foreground: 210 20% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 200 30% 18%;
-    --input: 200 30% 18%;
-    --ring: 197 71% 52%;
+    --border: 210 35% 18%;
+    --input: 210 35% 18%;
+    --ring: 210 52% 55%;
 
-    --sidebar-background: 200 30% 12%;
-    --sidebar-foreground: 197 20% 95%;
-    --sidebar-primary: 197 71% 52%;
+    --sidebar-background: 210 35% 12%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 210 52% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 200 30% 18%;
-    --sidebar-accent-foreground: 197 20% 95%;
-    --sidebar-border: 200 30% 18%;
-    --sidebar-ring: 197 40% 60%;
+    --sidebar-accent: 210 35% 18%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 35% 18%;
+    --sidebar-ring: 210 45% 55%;
   }
 }
 
