@@ -119,7 +119,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
                   <img
                     src={img}
                     alt=""
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                   />
                 </div>
@@ -138,7 +138,7 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
               <img
                 src={img}
                 alt=""
-                className="w-full h-full object-contain scale-100 group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700"
               />
             </div>
           ))
