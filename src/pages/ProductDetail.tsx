@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { equipmentCategories, consumableCategories } from "@/data/categories";
+import { useCartStore } from "@/stores/cartStore";
+import { toast } from "sonner";
 
 interface Product {
   id: string;
@@ -33,6 +35,18 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [loading, setLoading] = useState(true);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    addItem({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image_url: product.image_url,
+    });
+    toast.success("Produit ajouté au panier!");
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -207,11 +221,14 @@ const ProductDetail = () => {
             )}
 
             <div className="border-t pt-6 space-y-4">
-              <Button size="lg" className="w-full" asChild>
-                <Link to="/demande-devis">
-                  <ShoppingCart className="w-5 h-5 mr-2" />
-                  Demander un devis
-                </Link>
+              <Button 
+                size="lg" 
+                className="w-full" 
+                onClick={handleAddToCart}
+                disabled={product.stock_quantity <= 0}
+              >
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Ajouter au panier
               </Button>
               
               <Button size="lg" variant="outline" className="w-full" asChild>
@@ -224,9 +241,8 @@ const ProductDetail = () => {
 
             <div className="bg-muted/50 rounded-lg p-4 text-sm text-muted-foreground">
               <p>
-                💡 Pour toute question ou demande de devis personnalisé, 
-                n'hésitez pas à nous contacter. Notre équipe est à votre disposition 
-                pour vous accompagner dans votre choix.
+                💡 Pour toute question, n'hésitez pas à nous contacter. 
+                Notre équipe est à votre disposition pour vous accompagner.
               </p>
             </div>
           </div>

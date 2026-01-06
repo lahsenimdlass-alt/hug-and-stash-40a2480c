@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Search, User, Phone } from "lucide-react";
 import { equipmentCategories, consumableCategories } from "@/data/categories";
+import CartButton from "@/components/CartButton";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,8 +81,8 @@ const Navigation = () => {
                 </div>
               </div>
             ))}
-            <Link to="/demande-devis" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
-              Devis
+            <Link to="/panier" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
+              Panier
             </Link>
             <Link to="/promotions" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
               Promotions
@@ -108,6 +109,7 @@ const Navigation = () => {
             <Button variant="ghost" size="icon" className="md:hidden">
               <Search className="h-5 w-5" />
             </Button>
+            <CartButton />
             <Link to="/admin/login">
               <Button variant="ghost" size="icon">
                 <User className="h-5 w-5" />
@@ -154,11 +156,11 @@ const Navigation = () => {
                     </div>
                   ))}
                   <Link
-                    to="/demande-devis"
+                    to="/panier"
                     className="py-3 text-sm font-medium border-b border-border"
                     onClick={() => setIsOpen(false)}
                   >
-                    Demande de Devis
+                    Panier
                   </Link>
                   <Link
                     to="/promotions"
