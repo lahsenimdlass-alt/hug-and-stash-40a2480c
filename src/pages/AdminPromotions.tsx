@@ -12,6 +12,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -59,6 +66,7 @@ const AdminPromotions = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [promotionProductCounts, setPromotionProductCounts] = useState<Record<string, number>>({});
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -485,34 +493,52 @@ const AdminPromotions = () => {
               Cochez les produits qui bénéficieront de la réduction de{" "}
               <strong>{selectedPromotion?.discount_percentage}%</strong>
             </p>
-            <ScrollArea className="h-[400px] border rounded-md p-4">
+            <div className="space-y-2">
+              <Label>Filtrer par catégorie</Label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Toutes les catégories" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes les catégories</SelectItem>
+                  {[...new Set(products.map(p => p.category))].map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {getCategoryLabel(cat)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <ScrollArea className="h-[350px] border rounded-md p-4">
               <div className="space-y-3">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted"
-                  >
-                    <Checkbox
-                      id={product.id}
-                      checked={selectedProductIds.includes(product.id)}
-                      onCheckedChange={() => toggleProductSelection(product.id)}
-                    />
-                    <label
-                      htmlFor={product.id}
-                      className="flex-1 cursor-pointer flex items-center justify-between"
+                {products
+                  .filter((product) => !selectedCategory || selectedCategory === "all" || product.category === selectedCategory)
+                  .map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted"
                     >
-                      <div>
-                        <p className="font-medium">{product.title}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {getCategoryLabel(product.category)}
-                        </p>
-                      </div>
-                      <span className="text-sm font-medium">
-                        {Number(product.price).toFixed(2)} MAD
-                      </span>
-                    </label>
-                  </div>
-                ))}
+                      <Checkbox
+                        id={product.id}
+                        checked={selectedProductIds.includes(product.id)}
+                        onCheckedChange={() => toggleProductSelection(product.id)}
+                      />
+                      <label
+                        htmlFor={product.id}
+                        className="flex-1 cursor-pointer flex items-center justify-between"
+                      >
+                        <div>
+                          <p className="font-medium">{product.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {getCategoryLabel(product.category)}
+                          </p>
+                        </div>
+                        <span className="text-sm font-medium">
+                          {Number(product.price).toFixed(2)} MAD
+                        </span>
+                      </label>
+                    </div>
+                  ))}
               </div>
             </ScrollArea>
             <div className="flex justify-between items-center">
