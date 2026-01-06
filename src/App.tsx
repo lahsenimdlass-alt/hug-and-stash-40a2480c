@@ -11,7 +11,8 @@ import Equipements from "./pages/Equipements";
 import Consommables from "./pages/Consommables";
 import CategoryProducts from "./pages/CategoryProducts";
 import ProductDetail from "./pages/ProductDetail";
-import DemandeDevis from "./pages/DemandeDevis";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import Distributeurs from "./pages/Distributeurs";
 import Promotions from "./pages/Promotions";
 import SAV from "./pages/SAV";
@@ -41,7 +42,8 @@ const App = () => (
             <Route path="/consommables" element={<Consommables />} />
             <Route path="/consommables/:slug" element={<CategoryProducts />} />
             <Route path="/produit/:id" element={<ProductDetail />} />
-            <Route path="/demande-devis" element={<DemandeDevis />} />
+            <Route path="/panier" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/distributeurs" element={<Distributeurs />} />
             <Route path="/promotions" element={<Promotions />} />
             <Route path="/sav" element={<SAV />} />
