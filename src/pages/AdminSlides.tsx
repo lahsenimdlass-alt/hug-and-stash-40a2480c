@@ -258,7 +258,7 @@ const AdminSlides = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold">Slides Accueil</h2>
           <p className="text-muted-foreground">
@@ -275,7 +275,7 @@ const AdminSlides = () => {
               Ajouter un slide
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingSlide ? "Modifier le slide" : "Ajouter un slide"}
@@ -410,18 +410,19 @@ const AdminSlides = () => {
           Aucun slide. Ajoutez-en un pour commencer.
         </div>
       ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]"></TableHead>
-              <TableHead className="w-[120px]">Image</TableHead>
-              <TableHead>Titre</TableHead>
-              <TableHead>Catégorie</TableHead>
-              <TableHead>Lien</TableHead>
-              <TableHead className="w-[80px]">Actif</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
+        <div className="overflow-x-auto rounded-lg border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[50px]"></TableHead>
+                <TableHead className="w-[100px]">Image</TableHead>
+                <TableHead className="min-w-[120px]">Titre</TableHead>
+                <TableHead className="min-w-[100px]">Catégorie</TableHead>
+                <TableHead className="min-w-[100px] hidden md:table-cell">Lien</TableHead>
+                <TableHead className="w-[70px]">Actif</TableHead>
+                <TableHead className="w-[90px]">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
           <TableBody>
             {slides.map((slide, index) => (
               <TableRow key={slide.id}>
@@ -471,7 +472,7 @@ const AdminSlides = () => {
                     <span className="text-muted-foreground">-</span>
                   )}
                 </TableCell>
-                <TableCell className="text-sm text-muted-foreground">
+                <TableCell className="text-sm text-muted-foreground hidden md:table-cell">
                   {slide.link_url || "-"}
                 </TableCell>
                 <TableCell>
@@ -505,6 +506,7 @@ const AdminSlides = () => {
             ))}
           </TableBody>
         </Table>
+        </div>
       )}
     </div>
   );
