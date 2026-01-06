@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { equipmentCategories, consumableCategories } from "@/data/categories";
 import { useCartStore } from "@/stores/cartStore";
+import { useProductPromotion } from "@/hooks/useProductPromotion";
 import { toast } from "sonner";
 
 interface Product {
@@ -37,12 +38,17 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const addItem = useCartStore((state) => state.addItem);
 
+  const { promotion } = useProductPromotion(product?.id || "", product?.price || 0);
+
   const handleAddToCart = () => {
     if (!product) return;
+    
+    const priceToUse = promotion ? promotion.discountedPrice : product.price;
+    
     addItem({
       id: product.id,
       title: product.title,
-      price: product.price,
+      price: priceToUse,
       image_url: product.image_url,
     });
     toast.success("Produit ajouté au panier!");
@@ -172,7 +178,12 @@ const ProductDetail = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Product Image Gallery */}
-          <div className="space-y-4">
+          <div className="space-y-4 relative">
+            {promotion && (
+              <Badge className="absolute top-4 left-4 z-10 bg-red-500 hover:bg-red-600 text-lg px-3 py-1">
+                -{promotion.discountPercentage}%
+              </Badge>
+            )}
             <ProductImageGallery
               images={productImages.map(img => img.image_url)}
               mainImage={product.image_url}
@@ -193,9 +204,28 @@ const ProductDetail = () => {
               </h1>
               
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-3xl md:text-4xl font-bold text-primary">
-                  {product.price.toFixed(2)} MAD
-                </span>
+                {promotion ? (
+                  <div className="flex flex-col">
+                    <span className="text-3xl md:text-4xl font-bold text-red-600">
+                      {promotion.discountedPrice.toFixed(2)} MAD
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl text-muted-foreground line-through">
+                        {product.price.toFixed(2)} MAD
+                      </span>
+                      <Badge className="bg-red-500 hover:bg-red-600">
+                        -{promotion.discountPercentage}%
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Promotion : {promotion.promotionTitle}
+                    </p>
+                  </div>
+                ) : (
+                  <span className="text-3xl md:text-4xl font-bold text-primary">
+                    {product.price.toFixed(2)} MAD
+                  </span>
+                )}
               </div>
 
               <div className="flex items-center gap-2">

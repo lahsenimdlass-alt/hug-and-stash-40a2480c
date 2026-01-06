@@ -31,7 +31,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2, Package } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 
 interface Product {
   id: string;
@@ -51,22 +51,16 @@ interface Promotion {
   created_at: string;
 }
 
-interface PromotionProduct {
-  product_id: string;
-}
-
 const AdminPromotions = () => {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isProductsDialogOpen, setIsProductsDialogOpen] = useState(false);
   const [editingPromotion, setEditingPromotion] = useState<Promotion | null>(null);
-  const [selectedPromotion, setSelectedPromotion] = useState<Promotion | null>(null);
   const [formLoading, setFormLoading] = useState(false);
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [promotionProductCounts, setPromotionProductCounts] = useState<Record<string, number>>({});
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -128,7 +122,7 @@ const AdminPromotions = () => {
         .eq("promotion_id", promotionId);
 
       if (error) throw error;
-      setSelectedProductIds((data || []).map((p: PromotionProduct) => p.product_id));
+      setSelectedProductIds((data || []).map((p) => p.product_id));
     } catch (error) {
       console.error("Error fetching promotion products:", error);
     }
@@ -150,9 +144,10 @@ const AdminPromotions = () => {
     });
     setEditingPromotion(null);
     setSelectedProductIds([]);
+    setSelectedCategory("all");
   };
 
-  const handleEdit = (promotion: Promotion) => {
+  const handleEdit = async (promotion: Promotion) => {
     setEditingPromotion(promotion);
     setFormData({
       title: promotion.title,
@@ -162,13 +157,8 @@ const AdminPromotions = () => {
       end_date: promotion.end_date,
       is_active: promotion.is_active,
     });
-    setIsDialogOpen(true);
-  };
-
-  const handleManageProducts = async (promotion: Promotion) => {
-    setSelectedPromotion(promotion);
     await fetchPromotionProducts(promotion.id);
-    setIsProductsDialogOpen(true);
+    setIsDialogOpen(true);
   };
 
   const handleDelete = async (id: string) => {
@@ -187,6 +177,12 @@ const AdminPromotions = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (selectedProductIds.length === 0) {
+      toast.error("Veuillez sélectionner au moins un produit");
+      return;
+    }
+    
     setFormLoading(true);
 
     try {
@@ -199,40 +195,31 @@ const AdminPromotions = () => {
         is_active: formData.is_active,
       };
 
+      let promotionId: string;
+
       if (editingPromotion) {
         const { error } = await supabase
           .from("promotions")
           .update(promotionData)
           .eq("id", editingPromotion.id);
         if (error) throw error;
-        toast.success("Promotion mise à jour");
+        promotionId = editingPromotion.id;
       } else {
-        const { error } = await supabase.from("promotions").insert([promotionData]);
+        const { data, error } = await supabase
+          .from("promotions")
+          .insert([promotionData])
+          .select()
+          .single();
         if (error) throw error;
-        toast.success("Promotion créée");
+        promotionId = data.id;
       }
 
-      setIsDialogOpen(false);
-      resetForm();
-      fetchPromotions();
-    } catch (error) {
-      console.error("Error saving promotion:", error);
-      toast.error("Erreur lors de l'enregistrement");
-    } finally {
-      setFormLoading(false);
-    }
-  };
-
-  const handleSaveProducts = async () => {
-    if (!selectedPromotion) return;
-    setFormLoading(true);
-
-    try {
-      // Delete existing associations
+      // Save associated products
+      // Delete existing associations first
       const { error: deleteError } = await supabase
         .from("promotion_products")
         .delete()
-        .eq("promotion_id", selectedPromotion.id);
+        .eq("promotion_id", promotionId);
 
       if (deleteError) throw deleteError;
 
@@ -242,7 +229,7 @@ const AdminPromotions = () => {
           .from("promotion_products")
           .insert(
             selectedProductIds.map((productId) => ({
-              promotion_id: selectedPromotion.id,
+              promotion_id: promotionId,
               product_id: productId,
             }))
           );
@@ -250,12 +237,13 @@ const AdminPromotions = () => {
         if (insertError) throw insertError;
       }
 
-      toast.success("Produits mis à jour");
-      setIsProductsDialogOpen(false);
+      toast.success(editingPromotion ? "Promotion mise à jour" : "Promotion créée");
+      setIsDialogOpen(false);
+      resetForm();
       fetchPromotions();
     } catch (error) {
-      console.error("Error saving promotion products:", error);
-      toast.error("Erreur lors de la sauvegarde");
+      console.error("Error saving promotion:", error);
+      toast.error("Erreur lors de l'enregistrement");
     } finally {
       setFormLoading(false);
     }
@@ -286,6 +274,12 @@ const AdminPromotions = () => {
     return labels[category] || category;
   };
 
+  const filteredProducts = products.filter(
+    (product) => selectedCategory === "all" || product.category === selectedCategory
+  );
+
+  const categories = [...new Set(products.map((p) => p.category))];
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -308,21 +302,37 @@ const AdminPromotions = () => {
               Ajouter une promotion
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingPromotion ? "Modifier la promotion" : "Nouvelle promotion"}
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Titre *</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                />
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Basic Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Titre *</Label>
+                  <Input
+                    id="title"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="discount">Réduction (%) *</Label>
+                  <Input
+                    id="discount"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value={formData.discount_percentage}
+                    onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })}
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -332,19 +342,6 @@ const AdminPromotions = () => {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={2}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="discount">Réduction (%) *</Label>
-                <Input
-                  id="discount"
-                  type="number"
-                  min="1"
-                  max="100"
-                  value={formData.discount_percentage}
-                  onChange={(e) => setFormData({ ...formData, discount_percentage: e.target.value })}
-                  required
                 />
               </div>
 
@@ -380,7 +377,82 @@ const AdminPromotions = () => {
                 <Label htmlFor="is_active">Promotion active</Label>
               </div>
 
-              <div className="flex justify-end gap-2">
+              {/* Product Selection Section */}
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between mb-4">
+                  <Label className="text-lg font-semibold">
+                    Produits concernés ({selectedProductIds.length} sélectionnés) *
+                  </Label>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Filtrer par catégorie</Label>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Toutes les catégories" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Toutes les catégories</SelectItem>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {getCategoryLabel(cat)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <ScrollArea className="h-[250px] border rounded-md p-4">
+                    <div className="space-y-2">
+                      {filteredProducts.length === 0 ? (
+                        <p className="text-center text-muted-foreground py-4">
+                          Aucun produit dans cette catégorie
+                        </p>
+                      ) : (
+                        filteredProducts.map((product) => (
+                          <div
+                            key={product.id}
+                            className={`flex items-center space-x-3 p-3 rounded-md hover:bg-muted cursor-pointer transition-colors ${
+                              selectedProductIds.includes(product.id) ? "bg-primary/10 border border-primary/30" : ""
+                            }`}
+                            onClick={() => toggleProductSelection(product.id)}
+                          >
+                            <Checkbox
+                              id={product.id}
+                              checked={selectedProductIds.includes(product.id)}
+                              onCheckedChange={() => toggleProductSelection(product.id)}
+                            />
+                            <label
+                              htmlFor={product.id}
+                              className="flex-1 cursor-pointer flex items-center justify-between"
+                            >
+                              <div>
+                                <p className="font-medium">{product.title}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {getCategoryLabel(product.category)}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <span className="text-sm font-medium">
+                                  {Number(product.price).toFixed(2)} MAD
+                                </span>
+                                {formData.discount_percentage && (
+                                  <p className="text-xs text-green-600">
+                                    → {(Number(product.price) * (1 - parseInt(formData.discount_percentage) / 100)).toFixed(2)} MAD
+                                  </p>
+                                )}
+                              </div>
+                            </label>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Annuler
                 </Button>
@@ -393,7 +465,7 @@ const AdminPromotions = () => {
                   ) : editingPromotion ? (
                     "Mettre à jour"
                   ) : (
-                    "Créer"
+                    "Créer la promotion"
                   )}
                 </Button>
               </div>
@@ -450,14 +522,6 @@ const AdminPromotions = () => {
                           <Button
                             variant="ghost"
                             size="icon"
-                            onClick={() => handleManageProducts(promotion)}
-                            title="Gérer les produits"
-                          >
-                            <Package className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
                             onClick={() => handleEdit(promotion)}
                           >
                             <Pencil className="h-4 w-4" />
@@ -479,94 +543,6 @@ const AdminPromotions = () => {
           )}
         </CardContent>
       </Card>
-
-      {/* Products Selection Dialog */}
-      <Dialog open={isProductsDialogOpen} onOpenChange={setIsProductsDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>
-              Sélectionner les produits pour : {selectedPromotion?.title}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Cochez les produits qui bénéficieront de la réduction de{" "}
-              <strong>{selectedPromotion?.discount_percentage}%</strong>
-            </p>
-            <div className="space-y-2">
-              <Label>Filtrer par catégorie</Label>
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Toutes les catégories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Toutes les catégories</SelectItem>
-                  {[...new Set(products.map(p => p.category))].map((cat) => (
-                    <SelectItem key={cat} value={cat}>
-                      {getCategoryLabel(cat)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <ScrollArea className="h-[350px] border rounded-md p-4">
-              <div className="space-y-3">
-                {products
-                  .filter((product) => !selectedCategory || selectedCategory === "all" || product.category === selectedCategory)
-                  .map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex items-center space-x-3 p-2 rounded-md hover:bg-muted"
-                    >
-                      <Checkbox
-                        id={product.id}
-                        checked={selectedProductIds.includes(product.id)}
-                        onCheckedChange={() => toggleProductSelection(product.id)}
-                      />
-                      <label
-                        htmlFor={product.id}
-                        className="flex-1 cursor-pointer flex items-center justify-between"
-                      >
-                        <div>
-                          <p className="font-medium">{product.title}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {getCategoryLabel(product.category)}
-                          </p>
-                        </div>
-                        <span className="text-sm font-medium">
-                          {Number(product.price).toFixed(2)} MAD
-                        </span>
-                      </label>
-                    </div>
-                  ))}
-              </div>
-            </ScrollArea>
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-muted-foreground">
-                {selectedProductIds.length} produit(s) sélectionné(s)
-              </p>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsProductsDialogOpen(false)}
-                >
-                  Annuler
-                </Button>
-                <Button onClick={handleSaveProducts} disabled={formLoading}>
-                  {formLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Enregistrement...
-                    </>
-                  ) : (
-                    "Enregistrer"
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
