@@ -8,23 +8,30 @@ interface Slide {
   subtitle: string | null;
   link_url: string | null;
   display_order: number;
+  category_type: string | null;
 }
 
-export const useHomepageSlides = (categoryType?: "equipment" | "consumable") => {
+export const useHomepageSlides = (categoryType?: "equipment" | "consumable" | null) => {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        // Note: homepage_slides table doesn't have category_type column yet
-        // For now, we fetch all active slides - this can be enhanced later
-        // when category-specific slides are needed
-        const { data, error } = await supabase
+        let query = supabase
           .from("homepage_slides")
-          .select("id, image_url, title, subtitle, link_url, display_order")
+          .select("id, image_url, title, subtitle, link_url, display_order, category_type")
           .eq("is_active", true)
           .order("display_order", { ascending: true });
+
+        // Filter by category_type if provided
+        if (categoryType === "equipment") {
+          query = query.eq("category_type", "equipements");
+        } else if (categoryType === "consumable") {
+          query = query.eq("category_type", "consommables");
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
         setSlides(data || []);
