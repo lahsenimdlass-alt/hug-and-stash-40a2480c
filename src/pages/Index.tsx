@@ -87,19 +87,18 @@ const Index = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-primary">
+        <section className="py-20 bg-muted">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold text-primary-foreground mb-4 tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 tracking-tight">
               Besoin d'un devis personnalisé ?
             </h2>
-            <p className="text-primary-foreground/70 mb-8 max-w-xl mx-auto">
+            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
               Notre équipe d'experts vous accompagne pour équiper votre cabinet dentaire 
               avec les solutions adaptées à vos besoins.
             </p>
             <Button 
               asChild 
               size="lg" 
-              variant="secondary" 
               className="rounded-full"
             >
               <Link to="/demande-devis">

@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import ProductImageGallery from "@/components/ProductImageGallery";
-import { Loader2, ArrowLeft, Package, ShoppingCart, Phone } from "lucide-react";
+import { Loader2, ArrowLeft, Package, ShoppingCart, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -261,10 +261,10 @@ const ProductDetail = () => {
                 Ajouter au panier
               </Button>
               
-              <Button size="lg" variant="outline" className="w-full" asChild>
-                <a href="tel:+212600000000">
-                  <Phone className="w-5 h-5 mr-2" />
-                  Nous contacter
+              <Button size="lg" variant="outline" className="w-full bg-green-500 hover:bg-green-600 text-white border-green-500 hover:border-green-600" asChild>
+                <a href={`https://wa.me/212649499299?text=Bonjour, je suis intéressé par le produit: ${encodeURIComponent(product.title)}`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Commander en WhatsApp
                 </a>
               </Button>
             </div>
