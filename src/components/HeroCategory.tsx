@@ -3,29 +3,30 @@ import { Link } from "react-router-dom";
 import { Armchair, Syringe } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { useHomepageSlides } from "@/hooks/useHomepageSlides";
 
-// Import equipment images
+// Import equipment images (fallback)
 import equipment1 from "@/assets/equipment-1.jpg";
 import equipment2 from "@/assets/equipment-2.jpg";
 import equipment3 from "@/assets/equipment-3.jpg";
 import equipment4 from "@/assets/equipment-4.jpg";
 
-// Import consumable images
+// Import consumable images (fallback)
 import consumable1 from "@/assets/consumable-1.jpg";
 import consumable2 from "@/assets/consumable-2.jpg";
 import consumable3 from "@/assets/consumable-3.jpg";
 import consumable4 from "@/assets/consumable-4.jpg";
 
-// Dental equipment images: chairs, units, x-ray machines
-const equipmentImages = [
+// Fallback dental equipment images
+const fallbackEquipmentImages = [
   equipment1,
   equipment2,
   equipment3,
   equipment4,
 ];
 
-// Dental consumables images: instruments, materials
-const consumableImages = [
+// Fallback dental consumables images
+const fallbackConsumableImages = [
   consumable1,
   consumable2,
   consumable3,
@@ -42,7 +43,13 @@ const HeroCategory = ({ type }: HeroCategoryProps) => {
   const [isMobile, setIsMobile] = useState(false);
 
   const isEquipment = type === "equipment";
-  const images = isEquipment ? equipmentImages : consumableImages;
+  const categoryType = isEquipment ? "equipment" : "consumable";
+  const { slides, loading } = useHomepageSlides(categoryType);
+  
+  // Use database images if available, otherwise fallback to local images
+  const fallbackImages = isEquipment ? fallbackEquipmentImages : fallbackConsumableImages;
+  const images = slides.length > 0 ? slides.map(s => s.image_url) : fallbackImages;
+  
   const title = isEquipment ? "Équipements Dentaires" : "Consommables Dentaires";
   const link = isEquipment ? "/equipements" : "/consommables";
   const Icon = isEquipment ? Armchair : Syringe;
