@@ -102,7 +102,7 @@ const AdminPromotions = () => {
       const { data, error } = await supabase
         .from("products")
         .select("id, title, category, price")
-        .eq("is_active", true)
+        .order("category")
         .order("title");
 
       if (error) throw error;
@@ -271,7 +271,9 @@ const AdminPromotions = () => {
   const getCategoryLabel = (category: string) => {
     const labels: Record<string, string> = {
       equipements_medicaux: "Équipements médicaux",
+      equipements_dentaires: "Équipements dentaires",
       consommables: "Consommables",
+      consommables_dentaires: "Consommables dentaires",
     };
     return labels[category] || category;
   };
