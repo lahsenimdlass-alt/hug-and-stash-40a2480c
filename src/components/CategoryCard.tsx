@@ -27,7 +27,7 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
               <img 
                 src={imageUrl} 
                 alt="" 
-                className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-300"
+                className="w-full h-full object-cover opacity-50 group-hover:opacity-60 transition-opacity duration-300"
               />
             </div>
           )}
