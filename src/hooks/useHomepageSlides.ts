@@ -10,13 +10,16 @@ interface Slide {
   display_order: number;
 }
 
-export const useHomepageSlides = (type: "equipment" | "consumables") => {
+export const useHomepageSlides = (categoryType?: "equipment" | "consumable") => {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSlides = async () => {
       try {
+        // Note: homepage_slides table doesn't have category_type column yet
+        // For now, we fetch all active slides - this can be enhanced later
+        // when category-specific slides are needed
         const { data, error } = await supabase
           .from("homepage_slides")
           .select("id, image_url, title, subtitle, link_url, display_order")
@@ -33,7 +36,7 @@ export const useHomepageSlides = (type: "equipment" | "consumables") => {
     };
 
     fetchSlides();
-  }, [type]);
+  }, [categoryType]);
 
   return { slides, loading };
 };
