@@ -34,14 +34,12 @@ const CategoryProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Map slug to database category - for now we filter by matching category field
-        const dbCategory = isEquipment ? "equipements_dentaires" : "consommables_dentaires";
-        
+        // Use the slug directly as the category ID to match the database
         const { data, error } = await supabase
           .from("products")
           .select("*")
           .eq("is_active", true)
-          .eq("category", dbCategory)
+          .eq("category", slug)
           .order("created_at", { ascending: false });
 
         if (error) {

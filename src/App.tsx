@@ -10,6 +10,7 @@ import Catalogue from "./pages/Catalogue";
 import Equipements from "./pages/Equipements";
 import Consommables from "./pages/Consommables";
 import CategoryProducts from "./pages/CategoryProducts";
+import ProductDetail from "./pages/ProductDetail";
 import DemandeDevis from "./pages/DemandeDevis";
 import Distributeurs from "./pages/Distributeurs";
 import Promotions from "./pages/Promotions";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/equipements/:slug" element={<CategoryProducts />} />
             <Route path="/consommables" element={<Consommables />} />
             <Route path="/consommables/:slug" element={<CategoryProducts />} />
+            <Route path="/produit/:id" element={<ProductDetail />} />
             <Route path="/demande-devis" element={<DemandeDevis />} />
             <Route path="/distributeurs" element={<Distributeurs />} />
             <Route path="/promotions" element={<Promotions />} />

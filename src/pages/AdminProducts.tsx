@@ -6,7 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -30,6 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Loader2, Upload, X } from "lucide-react";
+import { equipmentCategories, consumableCategories } from "@/data/categories";
 
 interface Product {
   id: string;
@@ -56,7 +59,7 @@ const AdminProducts = () => {
     title: "",
     description: "",
     price: "",
-    category: "equipements_medicaux",
+    category: equipmentCategories[0]?.id || "radiographie",
     image_url: "",
     stock_quantity: "0",
     is_active: true,
@@ -88,7 +91,7 @@ const AdminProducts = () => {
       title: "",
       description: "",
       price: "",
-      category: "equipements_medicaux",
+      category: equipmentCategories[0]?.id || "radiographie",
       image_url: "",
       stock_quantity: "0",
       is_active: true,
@@ -210,10 +213,14 @@ const AdminProducts = () => {
     }
   };
 
-  const categoryLabels: Record<string, string> = {
-    equipements_medicaux: "Équipements Médicaux",
-    consommables: "Consommables",
-  };
+  // Build category labels from imported categories
+  const categoryLabels: Record<string, string> = {};
+  equipmentCategories.forEach((cat) => {
+    categoryLabels[cat.id] = `Équipements - ${cat.name}`;
+  });
+  consumableCategories.forEach((cat) => {
+    categoryLabels[cat.id] = `Consommables - ${cat.name}`;
+  });
 
   if (loading) {
     return (
@@ -225,8 +232,8 @@ const AdminProducts = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">Gestion des Produits</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold">Gestion des Produits</h1>
         <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
           if (!open) resetForm();
@@ -263,11 +270,25 @@ const AdminProducts = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Sélectionner une catégorie" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="equipements_medicaux">Équipements Médicaux</SelectItem>
-                      <SelectItem value="consommables">Consommables</SelectItem>
+                    <SelectContent className="max-h-80">
+                      <SelectGroup>
+                        <SelectLabel>Équipements</SelectLabel>
+                        {equipmentCategories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                      <SelectGroup>
+                        <SelectLabel>Consommables</SelectLabel>
+                        {consumableCategories.map((cat) => (
+                          <SelectItem key={cat.id} value={cat.id}>
+                            {cat.name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
                     </SelectContent>
                   </Select>
                 </div>
