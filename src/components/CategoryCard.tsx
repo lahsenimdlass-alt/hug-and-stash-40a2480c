@@ -20,26 +20,30 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
   return (
     <Link to={href}>
       <Card className="group h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50 hover:border-primary/30 overflow-hidden">
-        <CardContent className="relative flex flex-col items-center justify-center p-6 text-center h-full min-h-[160px]">
-          {/* Background image */}
-          {imageUrl && (
+        <CardContent className="relative flex flex-col items-center justify-center p-0 text-center h-full min-h-[160px]">
+          {/* Background image - full visibility like homepage slides */}
+          {imageUrl ? (
             <div className="absolute inset-0 z-0">
               <img 
                 src={imageUrl} 
-                alt="" 
-                className="w-full h-full object-cover opacity-50 group-hover:opacity-60 transition-opacity duration-300"
+                alt={name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
+          ) : (
+            <div className="absolute inset-0 z-0 bg-muted" />
           )}
           
-          {/* Content */}
-          <div className="relative z-10">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-              <Icon className="w-7 h-7 text-primary" />
+          {/* Content overlay - semi-transparent background for text readability */}
+          <div className="relative z-10 w-full h-full flex flex-col items-center justify-end p-4">
+            <div className="bg-background/90 backdrop-blur-sm rounded-lg px-4 py-3 w-full">
+              <div className="flex items-center justify-center gap-2">
+                <Icon className="w-5 h-5 text-primary" />
+                <h3 className="font-medium text-foreground group-hover:text-primary transition-colors text-sm leading-tight">
+                  {name}
+                </h3>
+              </div>
             </div>
-            <h3 className="font-medium text-foreground group-hover:text-primary transition-colors text-sm leading-tight">
-              {name}
-            </h3>
           </div>
         </CardContent>
       </Card>
