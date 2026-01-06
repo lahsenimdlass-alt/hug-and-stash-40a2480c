@@ -29,7 +29,6 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
                 alt="" 
                 className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-300"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/60" />
             </div>
           )}
           
