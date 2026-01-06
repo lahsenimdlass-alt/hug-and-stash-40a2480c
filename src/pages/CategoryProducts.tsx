@@ -5,8 +5,10 @@ import Footer from "@/components/Footer";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { equipmentCategories, consumableCategories } from "@/data/categories";
+import { useProductsPromotions } from "@/hooks/useProductPromotion";
 
 interface Product {
   id: string;
@@ -31,10 +33,12 @@ const CategoryProducts = () => {
   const backLink = isEquipment ? "/equipements" : "/consommables";
   const backLabel = isEquipment ? "Équipements" : "Consommables";
 
+  const productIds = products.map((p) => p.id);
+  const { promotions } = useProductsPromotions(productIds);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Use the slug directly as the category ID to match the database
         const { data, error } = await supabase
           .from("products")
           .select("*")
@@ -57,6 +61,14 @@ const CategoryProducts = () => {
 
     fetchProducts();
   }, [slug, isEquipment, location.pathname]);
+
+  const getDiscountedPrice = (product: Product) => {
+    const promo = promotions[product.id];
+    if (promo) {
+      return product.price * (1 - promo.discountPercentage / 100);
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -101,45 +113,68 @@ const CategoryProducts = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <Link to={`/produit/${product.id}`}>
-                  <div className="aspect-square overflow-hidden bg-muted">
-                    {product.image_url ? (
-                      <img
-                        src={product.image_url}
-                        alt={product.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                        <span className="text-6xl">📷</span>
-                      </div>
-                    )}
-                  </div>
-                </Link>
-                <CardContent className="p-4">
-                  <Link to={`/produit/${product.id}`}>
-                    <h3 className="font-semibold text-lg mb-2 hover:text-primary transition-colors line-clamp-2">
-                      {product.title}
-                    </h3>
-                  </Link>
-                  {product.description && (
-                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                      {product.description}
-                    </p>
+            {products.map((product) => {
+              const discountedPrice = getDiscountedPrice(product);
+              const promo = promotions[product.id];
+
+              return (
+                <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow relative">
+                  {promo && (
+                    <Badge className="absolute top-3 left-3 z-10 bg-red-500 hover:bg-red-600">
+                      -{promo.discountPercentage}%
+                    </Badge>
                   )}
-                  <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold text-primary">
-                      {product.price.toFixed(2)} MAD
-                    </span>
-                    <Button size="sm" asChild>
-                      <Link to={`/produit/${product.id}`}>Voir détails</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <Link to={`/produit/${product.id}`}>
+                    <div className="aspect-square overflow-hidden bg-muted">
+                      {product.image_url ? (
+                        <img
+                          src={product.image_url}
+                          alt={product.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                          <span className="text-6xl">📷</span>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                  <CardContent className="p-4">
+                    <Link to={`/produit/${product.id}`}>
+                      <h3 className="font-semibold text-lg mb-2 hover:text-primary transition-colors line-clamp-2">
+                        {product.title}
+                      </h3>
+                    </Link>
+                    {product.description && (
+                      <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        {product.description}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        {discountedPrice ? (
+                          <>
+                            <span className="text-xl font-bold text-red-600">
+                              {discountedPrice.toFixed(2)} MAD
+                            </span>
+                            <span className="text-sm text-muted-foreground line-through">
+                              {product.price.toFixed(2)} MAD
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-xl font-bold text-primary">
+                            {product.price.toFixed(2)} MAD
+                          </span>
+                        )}
+                      </div>
+                      <Button size="sm" asChild>
+                        <Link to={`/produit/${product.id}`}>Voir détails</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </main>
