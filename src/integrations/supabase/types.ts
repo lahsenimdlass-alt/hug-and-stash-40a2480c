@@ -43,6 +43,7 @@ export type Database = {
       }
       homepage_slides: {
         Row: {
+          category_type: string | null
           created_at: string
           display_order: number
           id: string
@@ -54,6 +55,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          category_type?: string | null
           created_at?: string
           display_order?: number
           id?: string
@@ -65,6 +67,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          category_type?: string | null
           created_at?: string
           display_order?: number
           id?: string
