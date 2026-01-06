@@ -23,9 +23,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Eye } from "lucide-react";
+import { Eye, Trash2 } from "lucide-react";
 
 interface Order {
   id: string;
@@ -105,6 +116,32 @@ const AdminOrders = () => {
     }
   };
 
+  const handleDeleteOrder = async (orderId: string) => {
+    try {
+      // First delete order items
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .delete()
+        .eq("order_id", orderId);
+
+      if (itemsError) throw itemsError;
+
+      // Then delete the order
+      const { error: orderError } = await supabase
+        .from("orders")
+        .delete()
+        .eq("id", orderId);
+
+      if (orderError) throw orderError;
+      
+      toast.success("Commande supprimée avec succès");
+      fetchOrders();
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      toast.error("Erreur lors de la suppression de la commande");
+    }
+  };
+
   const statusLabels: Record<string, { label: string; color: string }> = {
     pending: { label: "En attente", color: "bg-yellow-500" },
     confirmed: { label: "Confirmée", color: "bg-blue-500" },
@@ -180,13 +217,39 @@ const AdminOrders = () => {
                         </Select>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleViewOrder(order)}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleViewOrder(order)}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Supprimer la commande ?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Cette action est irréversible. La commande de {order.customer_name} sera définitivement supprimée.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteOrder(order.id)}
+                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                  Supprimer
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
