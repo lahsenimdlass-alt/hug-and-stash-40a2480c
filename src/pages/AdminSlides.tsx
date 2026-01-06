@@ -20,7 +20,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2, Loader2, Upload, GripVertical, ImageIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Plus, Pencil, Trash2, Loader2, Upload, ImageIcon } from "lucide-react";
 
 interface Slide {
   id: string;
@@ -30,6 +37,7 @@ interface Slide {
   link_url: string | null;
   display_order: number;
   is_active: boolean;
+  category_type: string | null;
   created_at: string;
 }
 
@@ -48,6 +56,7 @@ const AdminSlides = () => {
     subtitle: "",
     link_url: "",
     is_active: true,
+    category_type: "" as string,
   });
 
   const fetchSlides = async () => {
@@ -78,6 +87,7 @@ const AdminSlides = () => {
       subtitle: "",
       link_url: "",
       is_active: true,
+      category_type: "",
     });
     setEditingSlide(null);
   };
@@ -90,6 +100,7 @@ const AdminSlides = () => {
       subtitle: slide.subtitle || "",
       link_url: slide.link_url || "",
       is_active: slide.is_active,
+      category_type: slide.category_type || "",
     });
     setDialogOpen(true);
   };
@@ -175,6 +186,7 @@ const AdminSlides = () => {
             subtitle: formData.subtitle || null,
             link_url: formData.link_url || null,
             is_active: formData.is_active,
+            category_type: formData.category_type || null,
           })
           .eq("id", editingSlide.id);
 
@@ -191,6 +203,7 @@ const AdminSlides = () => {
             link_url: formData.link_url || null,
             display_order: newOrder,
             is_active: formData.is_active,
+            category_type: formData.category_type || null,
           });
 
         if (error) throw error;
@@ -355,6 +368,25 @@ const AdminSlides = () => {
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label>Catégorie</Label>
+                <Select
+                  value={formData.category_type}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, category_type: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner une catégorie" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="equipements">Équipements</SelectItem>
+                    <SelectItem value="consommables">Consommables</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Associez ce slide à une catégorie spécifique
+                </p>
+              </div>
+
               <div className="flex items-center justify-between">
                 <Label htmlFor="is_active">Actif</Label>
                 <Switch
@@ -384,6 +416,7 @@ const AdminSlides = () => {
               <TableHead className="w-[50px]"></TableHead>
               <TableHead className="w-[120px]">Image</TableHead>
               <TableHead>Titre</TableHead>
+              <TableHead>Catégorie</TableHead>
               <TableHead>Lien</TableHead>
               <TableHead className="w-[80px]">Actif</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
@@ -424,6 +457,19 @@ const AdminSlides = () => {
                       <p className="text-sm text-muted-foreground">{slide.subtitle}</p>
                     )}
                   </div>
+                </TableCell>
+                <TableCell>
+                  {slide.category_type ? (
+                    <span className={`px-2 py-1 rounded text-xs ${
+                      slide.category_type === "equipements" 
+                        ? "bg-blue-100 text-blue-700" 
+                        : "bg-purple-100 text-purple-700"
+                    }`}>
+                      {slide.category_type === "equipements" ? "Équipements" : "Consommables"}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">-</span>
+                  )}
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
                   {slide.link_url || "-"}
