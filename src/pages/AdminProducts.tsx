@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,8 +31,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Loader2, Upload, X } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
 import { equipmentCategories, consumableCategories } from "@/data/categories";
+import MultiImageUpload from "@/components/admin/MultiImageUpload";
 
 interface Product {
   id: string;
@@ -46,21 +47,25 @@ interface Product {
   created_at: string;
 }
 
+interface ProductImage {
+  id?: string;
+  image_url: string;
+  display_order: number;
+}
+
 const AdminProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formLoading, setFormLoading] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [productImages, setProductImages] = useState<ProductImage[]>([]);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     price: "",
     category: equipmentCategories[0]?.id || "radiographie",
-    image_url: "",
     stock_quantity: "0",
     is_active: true,
   });
@@ -92,24 +97,32 @@ const AdminProducts = () => {
       description: "",
       price: "",
       category: equipmentCategories[0]?.id || "radiographie",
-      image_url: "",
       stock_quantity: "0",
       is_active: true,
     });
+    setProductImages([]);
     setEditingProduct(null);
   };
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = async (product: Product) => {
     setEditingProduct(product);
     setFormData({
       title: product.title,
       description: product.description || "",
       price: product.price.toString(),
       category: product.category,
-      image_url: product.image_url || "",
       stock_quantity: product.stock_quantity.toString(),
       is_active: product.is_active,
     });
+    
+    // Fetch product images
+    const { data: images } = await supabase
+      .from("product_images")
+      .select("*")
+      .eq("product_id", product.id)
+      .order("display_order", { ascending: true });
+    
+    setProductImages(images || []);
     setIsDialogOpen(true);
   };
 
@@ -127,51 +140,25 @@ const AdminProducts = () => {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const saveProductImages = async (productId: string) => {
+    // Delete existing images
+    await supabase
+      .from("product_images")
+      .delete()
+      .eq("product_id", productId);
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Veuillez sélectionner une image");
-      return;
+    // Insert new images
+    if (productImages.length > 0) {
+      const imagesToInsert = productImages.map((img, index) => ({
+        product_id: productId,
+        image_url: img.image_url,
+        display_order: index,
+      }));
+
+      await supabase
+        .from("product_images")
+        .insert(imagesToInsert);
     }
-
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("L'image ne doit pas dépasser 5MB");
-      return;
-    }
-
-    setUploadingImage(true);
-
-    try {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("product-images")
-        .upload(fileName, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from("product-images")
-        .getPublicUrl(fileName);
-
-      setFormData({ ...formData, image_url: publicUrl });
-      toast.success("Image téléchargée");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("Erreur lors du téléchargement de l'image");
-    } finally {
-      setUploadingImage(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setFormData({ ...formData, image_url: "" });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -179,15 +166,19 @@ const AdminProducts = () => {
     setFormLoading(true);
 
     try {
+      const mainImageUrl = productImages.length > 0 ? productImages[0].image_url : null;
+      
       const productData = {
         title: formData.title,
         description: formData.description || null,
         price: parseFloat(formData.price),
         category: formData.category,
-        image_url: formData.image_url || null,
+        image_url: mainImageUrl,
         stock_quantity: parseInt(formData.stock_quantity),
         is_active: formData.is_active,
       };
+
+      let productId = editingProduct?.id;
 
       if (editingProduct) {
         const { error } = await supabase
@@ -195,13 +186,22 @@ const AdminProducts = () => {
           .update(productData)
           .eq("id", editingProduct.id);
         if (error) throw error;
-        toast.success("Produit mis à jour");
       } else {
-        const { error } = await supabase.from("products").insert([productData]);
+        const { data, error } = await supabase
+          .from("products")
+          .insert([productData])
+          .select("id")
+          .single();
         if (error) throw error;
-        toast.success("Produit créé");
+        productId = data.id;
       }
 
+      // Save product images
+      if (productId) {
+        await saveProductImages(productId);
+      }
+
+      toast.success(editingProduct ? "Produit mis à jour" : "Produit créé");
       setIsDialogOpen(false);
       resetForm();
       fetchProducts();
@@ -330,57 +330,11 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Image du produit</Label>
-                {formData.image_url ? (
-                  <div className="relative inline-block">
-                    <img
-                      src={formData.image_url}
-                      alt="Aperçu"
-                      className="h-32 w-32 object-cover rounded border"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleRemoveImage}
-                      className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1 hover:bg-destructive/80"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                      id="image-upload"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={uploadingImage}
-                    >
-                      {uploadingImage ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Téléchargement...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="mr-2 h-4 w-4" />
-                          Télécharger une image
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                )}
-                <p className="text-xs text-muted-foreground">
-                  Formats acceptés: JPG, PNG, WebP. Taille max: 5MB
-                </p>
-              </div>
+              <MultiImageUpload
+                images={productImages}
+                onChange={setProductImages}
+                disabled={formLoading}
+              />
 
               <div className="flex items-center gap-2">
                 <input
@@ -397,7 +351,7 @@ const AdminProducts = () => {
                 <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
                   Annuler
                 </Button>
-                <Button type="submit" disabled={formLoading || uploadingImage}>
+                <Button type="submit" disabled={formLoading}>
                   {formLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import ProductImageGallery from "@/components/ProductImageGallery";
 import { Loader2, ArrowLeft, Package, ShoppingCart, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,10 +21,17 @@ interface Product {
   created_at: string;
 }
 
+interface ProductImage {
+  id: string;
+  image_url: string;
+  display_order: number;
+}
+
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
+  const [productImages, setProductImages] = useState<ProductImage[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,19 +39,27 @@ const ProductDetail = () => {
       if (!id) return;
       
       try {
-        const { data, error } = await supabase
-          .from("products")
-          .select("*")
-          .eq("id", id)
-          .eq("is_active", true)
-          .maybeSingle();
+        const [productResult, imagesResult] = await Promise.all([
+          supabase
+            .from("products")
+            .select("*")
+            .eq("id", id)
+            .eq("is_active", true)
+            .maybeSingle(),
+          supabase
+            .from("product_images")
+            .select("*")
+            .eq("product_id", id)
+            .order("display_order", { ascending: true })
+        ]);
 
-        if (error) {
-          console.error("Error fetching product:", error);
+        if (productResult.error) {
+          console.error("Error fetching product:", productResult.error);
           return;
         }
 
-        setProduct(data);
+        setProduct(productResult.data);
+        setProductImages(imagesResult.data || []);
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -141,21 +157,13 @@ const ProductDetail = () => {
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Product Image */}
+          {/* Product Image Gallery */}
           <div className="space-y-4">
-            <div className="aspect-square rounded-lg overflow-hidden bg-muted border">
-              {product.image_url ? (
-                <img
-                  src={product.image_url}
-                  alt={product.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                  <Package className="w-24 h-24" />
-                </div>
-              )}
-            </div>
+            <ProductImageGallery
+              images={productImages.map(img => img.image_url)}
+              mainImage={product.image_url}
+              productTitle={product.title}
+            />
           </div>
 
           {/* Product Info */}
