@@ -19,9 +19,9 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
 
   return (
     <Link to={href}>
-      <Card className="group h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50 hover:border-primary/30 overflow-hidden">
-        <CardContent className="relative flex flex-col items-center justify-center p-0 text-center h-full min-h-[160px]">
-          {/* Background image - full visibility like homepage slides */}
+      <Card className="group h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-0 overflow-hidden rounded-2xl">
+        <CardContent className="relative flex flex-col items-center justify-center p-0 text-center h-full min-h-[200px]">
+          {/* Background image - full visibility */}
           {imageUrl ? (
             <div className="absolute inset-0 z-0">
               <img 
@@ -34,16 +34,20 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
             <div className="absolute inset-0 z-0 bg-muted" />
           )}
           
-          {/* Content overlay - semi-transparent background for text readability */}
-          <div className="relative z-10 w-full h-full flex flex-col items-center justify-end p-4">
-            <div className="bg-background/90 backdrop-blur-sm rounded-lg px-4 py-3 w-full">
-              <div className="flex items-center justify-center gap-2">
-                <Icon className="w-5 h-5 text-primary" />
-                <h3 className="font-medium text-foreground group-hover:text-primary transition-colors text-sm leading-tight">
-                  {name}
-                </h3>
-              </div>
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 z-[1] bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+          
+          {/* Content centered */}
+          <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 gap-3">
+            {/* Icon in semi-transparent circle */}
+            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <Icon className="w-8 h-8 text-white" />
             </div>
+            
+            {/* Title */}
+            <h3 className="font-semibold text-white text-lg leading-tight">
+              {name}
+            </h3>
           </div>
         </CardContent>
       </Card>
