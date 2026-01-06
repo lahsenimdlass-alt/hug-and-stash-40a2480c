@@ -86,26 +86,41 @@ const Index = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* Nos Engagements Section */}
         <section className="py-20 bg-muted">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 tracking-tight">
-              Besoin d'un devis personnalisé ?
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-12 tracking-tight text-center">
+              Nos Engagements
             </h2>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Notre équipe d'experts vous accompagne pour équiper votre cabinet dentaire 
-              avec les solutions adaptées à vos besoins.
-            </p>
-            <Button 
-              asChild 
-              size="lg" 
-              className="rounded-full"
-            >
-              <Link to="/demande-devis">
-                Demander un devis
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <div className="text-center p-6 bg-background rounded-2xl shadow-sm">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Qualité Garantie</h3>
+                <p className="text-muted-foreground">
+                  Tous nos produits sont certifiés CE et répondent aux normes internationales les plus strictes.
+                </p>
+              </div>
+              <div className="text-center p-6 bg-background rounded-2xl shadow-sm">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <HeadphonesIcon className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Service Client</h3>
+                <p className="text-muted-foreground">
+                  Une équipe dédiée à votre écoute pour vous accompagner dans tous vos projets dentaires.
+                </p>
+              </div>
+              <div className="text-center p-6 bg-background rounded-2xl shadow-sm">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <Truck className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">Livraison Rapide</h3>
+                <p className="text-muted-foreground">
+                  Expédition sous 24 à 48h sur tout le Maroc avec suivi de votre commande.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
       </main>
