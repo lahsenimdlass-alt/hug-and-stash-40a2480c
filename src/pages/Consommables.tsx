@@ -23,6 +23,8 @@ const Consommables = () => {
               name={category.name}
               icon={category.icon}
               href={`/consommables/${category.slug}`}
+              slug={category.slug}
+              categoryType="consumable"
             />
           ))}
         </div>

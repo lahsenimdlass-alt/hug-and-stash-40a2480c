@@ -23,6 +23,8 @@ const Equipements = () => {
               name={category.name}
               icon={category.icon}
               href={`/equipements/${category.slug}`}
+              slug={category.slug}
+              categoryType="equipment"
             />
           ))}
         </div>
