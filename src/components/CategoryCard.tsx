@@ -18,27 +18,30 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
   );
 
   return (
-    <Link to={href}>
-      <Card className="group h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border/50 hover:border-primary/30 overflow-hidden">
-        <CardContent className="relative flex flex-col items-center justify-center p-6 text-center h-full min-h-[160px]">
-          {/* Background image */}
-          {imageUrl && (
+    <Link to={href} className="block">
+      <Card className="group h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 border-border/50 hover:border-primary/50 overflow-hidden">
+        <CardContent className="relative flex flex-col items-center justify-end p-0 text-center h-full min-h-[180px]">
+          {/* Background image with better visibility */}
+          {imageUrl ? (
             <div className="absolute inset-0 z-0">
               <img 
                 src={imageUrl} 
-                alt="" 
-                className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-300"
+                alt={name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/60" />
+              {/* Gradient overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent opacity-90 group-hover:opacity-80 transition-opacity duration-300" />
             </div>
+          ) : (
+            <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-colors duration-300" />
           )}
           
           {/* Content */}
-          <div className="relative z-10">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-              <Icon className="w-7 h-7 text-primary" />
+          <div className="relative z-10 p-4 w-full">
+            <div className="w-12 h-12 mx-auto rounded-full bg-background/90 backdrop-blur-sm shadow-lg flex items-center justify-center mb-3 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+              <Icon className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-300" />
             </div>
-            <h3 className="font-medium text-foreground group-hover:text-primary transition-colors text-sm leading-tight">
+            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors duration-300 text-sm leading-tight drop-shadow-sm">
               {name}
             </h3>
           </div>
