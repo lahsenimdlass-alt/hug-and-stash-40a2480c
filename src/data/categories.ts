@@ -9,8 +9,7 @@ import {
   Monitor, 
   Shield, 
   Wind, 
-  Stethoscope,
-  FileText
+  Stethoscope
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -25,6 +24,7 @@ import restaurationIcon from "@/assets/categories/restauration.png";
 import reconstitutionIcon from "@/assets/categories/reconstitution.png";
 import protheseLaboratoireIcon from "@/assets/categories/prothese-laboratoire.png";
 import instrumentationsIcon from "@/assets/categories/instrumentations.png";
+import endodontieIcon from "@/assets/categories/endodontie.png";
 
 export interface Category {
   id: string;
@@ -54,7 +54,7 @@ export const consumableCategories: Category[] = [
   { id: "hygiene-desinfection", name: "Hygiène & Désinfection", iconImage: hygieneDesinfectionIcon, slug: "hygiene-desinfection" },
   { id: "blanchiment", name: "Blanchiment", iconImage: blanchimentIcon, slug: "blanchiment" },
   { id: "fraise-polissage", name: "Fraise et Polissage", iconImage: fraisePolissageIcon, slug: "fraise-polissage" },
-  { id: "endodontie", name: "Endodontie", icon: FileText, slug: "endodontie" },
+  { id: "endodontie", name: "Endodontie", iconImage: endodontieIcon, slug: "endodontie" },
   { id: "ciments", name: "Ciments", iconImage: cimentsIcon, slug: "ciments" },
   { id: "restauration", name: "Restauration", iconImage: restaurationIcon, slug: "restauration" },
   { id: "reconstitution", name: "Reconstitution", iconImage: reconstitutionIcon, slug: "reconstitution" },
