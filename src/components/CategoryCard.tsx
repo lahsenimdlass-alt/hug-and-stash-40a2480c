@@ -20,7 +20,7 @@ const CategoryCard = ({ name, icon: Icon, iconImage, href, slug, categoryType }:
 
   return (
     <Link to={href}>
-      <Card className="group h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-0 overflow-hidden rounded-2xl">
+      <Card className={`group h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden rounded-2xl ${imageUrl ? 'border-0' : 'border border-gray-200'}`}>
         <CardContent className="relative flex flex-col items-center justify-center p-0 text-center h-full min-h-[200px]">
           {/* Background image or white background */}
           {imageUrl ? (
