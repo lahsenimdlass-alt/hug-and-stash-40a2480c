@@ -40,16 +40,16 @@ const CategoryCard = ({ name, icon: Icon, iconImage, href, slug, categoryType }:
           
           {/* Content centered */}
           <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 gap-3">
-          {/* Icon */}
-          {iconImage ? (
-            <img 
-              src={iconImage} 
-              alt={name}
-              className="w-20 h-20 object-contain"
-            />
-          ) : Icon ? (
-            <Icon className="w-16 h-16 text-white" />
-          ) : null}
+            {/* Icon */}
+            {iconImage ? (
+              <img 
+                src={iconImage} 
+                alt={name}
+                className="w-28 h-28 object-contain"
+              />
+            ) : Icon ? (
+              <Icon className="w-20 h-20 text-white" />
+            ) : null}
             
             {/* Title */}
             <h3 className="font-semibold text-white text-lg leading-tight">
