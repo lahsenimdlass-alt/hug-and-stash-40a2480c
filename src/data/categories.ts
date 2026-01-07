@@ -15,16 +15,16 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 // Import consumable category icons
-import empreintesIcon from "@/assets/categories/empreintes.jpg";
-import usageUniqueIcon from "@/assets/categories/usage-unique.jpg";
-import hygieneDesinfectionIcon from "@/assets/categories/hygiene-desinfection.jpg";
-import blanchimentIcon from "@/assets/categories/blanchiment.jpg";
-import fraisePolissageIcon from "@/assets/categories/fraise-polissage.jpg";
-import cimentsIcon from "@/assets/categories/ciments.jpg";
-import restaurationIcon from "@/assets/categories/restauration.jpg";
-import reconstitutionIcon from "@/assets/categories/reconstitution.jpg";
-import protheseLaboratoireIcon from "@/assets/categories/prothese-laboratoire.jpg";
-import instrumentationsIcon from "@/assets/categories/instrumentations.jpg";
+import empreintesIcon from "@/assets/categories/empreintes.png";
+import usageUniqueIcon from "@/assets/categories/usage-unique.png";
+import hygieneDesinfectionIcon from "@/assets/categories/hygiene-desinfection.png";
+import blanchimentIcon from "@/assets/categories/blanchiment.png";
+import fraisePolissageIcon from "@/assets/categories/fraise-polissage.png";
+import cimentsIcon from "@/assets/categories/ciments.png";
+import restaurationIcon from "@/assets/categories/restauration.png";
+import reconstitutionIcon from "@/assets/categories/reconstitution.png";
+import protheseLaboratoireIcon from "@/assets/categories/prothese-laboratoire.png";
+import instrumentationsIcon from "@/assets/categories/instrumentations.png";
 
 export interface Category {
   id: string;
