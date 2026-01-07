@@ -5,13 +5,14 @@ import { useCategoryImage } from "@/hooks/useCategoryImage";
 
 interface CategoryCardProps {
   name: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
+  iconImage?: string;
   href: string;
   slug?: string;
   categoryType?: "equipment" | "consumable";
 }
 
-const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCardProps) => {
+const CategoryCard = ({ name, icon: Icon, iconImage, href, slug, categoryType }: CategoryCardProps) => {
   const { imageUrl } = useCategoryImage(
     slug || href.split("/").pop() || "", 
     categoryType || "equipment"
@@ -40,8 +41,16 @@ const CategoryCard = ({ name, icon: Icon, href, slug, categoryType }: CategoryCa
           {/* Content centered */}
           <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 gap-3">
             {/* Icon in semi-transparent circle */}
-            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <Icon className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+              {iconImage ? (
+                <img 
+                  src={iconImage} 
+                  alt={name}
+                  className="w-10 h-10 object-contain"
+                />
+              ) : Icon ? (
+                <Icon className="w-8 h-8 text-white" />
+              ) : null}
             </div>
             
             {/* Title */}

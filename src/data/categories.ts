@@ -10,24 +10,27 @@ import {
   Shield, 
   Wind, 
   Stethoscope,
-  Droplets,
-  Trash2,
-  SprayCan,
-  Sparkles,
-  CircleDot,
-  FileText,
-  Layers,
-  Square,
-  Wrench,
-  FlaskConical,
-  Hammer
+  FileText
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+
+// Import consumable category icons
+import empreintesIcon from "@/assets/categories/empreintes.jpg";
+import usageUniqueIcon from "@/assets/categories/usage-unique.jpg";
+import hygieneDesinfectionIcon from "@/assets/categories/hygiene-desinfection.jpg";
+import blanchimentIcon from "@/assets/categories/blanchiment.jpg";
+import fraisePolissageIcon from "@/assets/categories/fraise-polissage.jpg";
+import cimentsIcon from "@/assets/categories/ciments.jpg";
+import restaurationIcon from "@/assets/categories/restauration.jpg";
+import reconstitutionIcon from "@/assets/categories/reconstitution.jpg";
+import protheseLaboratoireIcon from "@/assets/categories/prothese-laboratoire.jpg";
+import instrumentationsIcon from "@/assets/categories/instrumentations.jpg";
 
 export interface Category {
   id: string;
   name: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
+  iconImage?: string;
   slug: string;
 }
 
@@ -46,15 +49,15 @@ export const equipmentCategories: Category[] = [
 ];
 
 export const consumableCategories: Category[] = [
-  { id: "empreintes", name: "Empreintes", icon: Droplets, slug: "empreintes" },
-  { id: "usage-unique", name: "Usage Unique", icon: Trash2, slug: "usage-unique" },
-  { id: "hygiene-desinfection", name: "Hygiène & Désinfection", icon: SprayCan, slug: "hygiene-desinfection" },
-  { id: "blanchiment", name: "Blanchiment", icon: Sparkles, slug: "blanchiment" },
-  { id: "fraise-polissage", name: "Fraise et Polissage", icon: CircleDot, slug: "fraise-polissage" },
+  { id: "empreintes", name: "Empreintes", iconImage: empreintesIcon, slug: "empreintes" },
+  { id: "usage-unique", name: "Usage Unique", iconImage: usageUniqueIcon, slug: "usage-unique" },
+  { id: "hygiene-desinfection", name: "Hygiène & Désinfection", iconImage: hygieneDesinfectionIcon, slug: "hygiene-desinfection" },
+  { id: "blanchiment", name: "Blanchiment", iconImage: blanchimentIcon, slug: "blanchiment" },
+  { id: "fraise-polissage", name: "Fraise et Polissage", iconImage: fraisePolissageIcon, slug: "fraise-polissage" },
   { id: "endodontie", name: "Endodontie", icon: FileText, slug: "endodontie" },
-  { id: "ciments", name: "Ciments", icon: Layers, slug: "ciments" },
-  { id: "restauration", name: "Restauration", icon: Square, slug: "restauration" },
-  { id: "reconstitution", name: "Reconstitution", icon: Wrench, slug: "reconstitution" },
-  { id: "prothese-laboratoire", name: "Prothèse et Laboratoire", icon: FlaskConical, slug: "prothese-laboratoire" },
-  { id: "instrumentations", name: "Instrumentations", icon: Hammer, slug: "instrumentations" },
+  { id: "ciments", name: "Ciments", iconImage: cimentsIcon, slug: "ciments" },
+  { id: "restauration", name: "Restauration", iconImage: restaurationIcon, slug: "restauration" },
+  { id: "reconstitution", name: "Reconstitution", iconImage: reconstitutionIcon, slug: "reconstitution" },
+  { id: "prothese-laboratoire", name: "Prothèse et Laboratoire", iconImage: protheseLaboratoireIcon, slug: "prothese-laboratoire" },
+  { id: "instrumentations", name: "Instrumentations", iconImage: instrumentationsIcon, slug: "instrumentations" },
 ];
