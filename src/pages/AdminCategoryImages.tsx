@@ -146,6 +146,7 @@ const AdminCategoryImages = () => {
         const image = getImageForCategory(category.slug, type);
         const isUploading = uploading === category.slug;
         const Icon = category.icon;
+        const iconImage = category.iconImage;
 
         return (
           <div
@@ -198,7 +199,11 @@ const AdminCategoryImages = () => {
               )}
             </div>
             <div className="p-3 flex items-center gap-2">
-              <Icon className="h-4 w-4 text-primary flex-shrink-0" />
+              {Icon ? (
+                <Icon className="h-4 w-4 text-primary flex-shrink-0" />
+              ) : iconImage ? (
+                <img src={iconImage} alt="" className="h-4 w-4 flex-shrink-0" />
+              ) : null}
               <span className="text-sm font-medium truncate">{category.name}</span>
             </div>
           </div>
