@@ -22,7 +22,7 @@ const CategoryCard = ({ name, icon: Icon, iconImage, href, slug, categoryType }:
     <Link to={href}>
       <Card className="group h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border-0 overflow-hidden rounded-2xl">
         <CardContent className="relative flex flex-col items-center justify-center p-0 text-center h-full min-h-[200px]">
-          {/* Background image - full visibility */}
+          {/* Background image or white background */}
           {imageUrl ? (
             <div className="absolute inset-0 z-0">
               <img 
@@ -32,11 +32,13 @@ const CategoryCard = ({ name, icon: Icon, iconImage, href, slug, categoryType }:
               />
             </div>
           ) : (
-            <div className="absolute inset-0 z-0 bg-muted" />
+            <div className="absolute inset-0 z-0 bg-white" />
           )}
           
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 z-[1] bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+          {/* Dark overlay for text readability - only when there's an image */}
+          {imageUrl && (
+            <div className="absolute inset-0 z-[1] bg-black/40 group-hover:bg-black/50 transition-colors duration-300" />
+          )}
           
           {/* Content centered */}
           <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6 gap-3">
@@ -48,11 +50,11 @@ const CategoryCard = ({ name, icon: Icon, iconImage, href, slug, categoryType }:
                 className="w-28 h-28 object-contain"
               />
             ) : Icon ? (
-              <Icon className="w-20 h-20 text-white" />
+              <Icon className={`w-20 h-20 ${imageUrl ? 'text-white' : 'text-black'}`} />
             ) : null}
             
             {/* Title */}
-            <h3 className="font-semibold text-white text-lg leading-tight">
+            <h3 className={`font-semibold text-lg leading-tight ${imageUrl ? 'text-white' : 'text-black'}`}>
               {name}
             </h3>
           </div>
