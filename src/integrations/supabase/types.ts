@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      categories: {
+        Row: {
+          category_type: string
+          created_at: string
+          display_order: number
+          icon_url: string | null
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          category_type: string
+          created_at?: string
+          display_order?: number
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          category_type?: string
+          created_at?: string
+          display_order?: number
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       category_images: {
         Row: {
           category_slug: string

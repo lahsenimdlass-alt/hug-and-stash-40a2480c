@@ -1,9 +1,12 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import CategoryCard from "@/components/CategoryCard";
-import { consumableCategories } from "@/data/categories";
+import { useCategories } from "@/hooks/useCategories";
+import { Loader2 } from "lucide-react";
 
 const Consommables = () => {
+  const { categories, loading } = useCategories("consumable");
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -16,19 +19,24 @@ const Consommables = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-          {consumableCategories.map((category) => (
-            <CategoryCard
-              key={category.id}
-              name={category.name}
-              icon={category.icon}
-              iconImage={category.iconImage}
-              href={`/consommables/${category.slug}`}
-              slug={category.slug}
-              categoryType="consumable"
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+            {categories.map((category) => (
+              <CategoryCard
+                key={category.id}
+                name={category.name}
+                iconImage={category.icon_url || undefined}
+                href={`/consommables/${category.slug}`}
+                slug={category.slug}
+                categoryType="consumable"
+              />
+            ))}
+          </div>
+        )}
       </main>
       
       <Footer />
