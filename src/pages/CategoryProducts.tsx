@@ -85,7 +85,11 @@ const CategoryProducts = () => {
           </Link>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-              {category && <category.icon className="w-8 h-8 text-primary" />}
+              {category?.iconImage ? (
+                <img src={category.iconImage} alt={category.name} className="w-8 h-8 object-contain" />
+              ) : category?.icon ? (
+                <category.icon className="w-8 h-8 text-primary" />
+              ) : null}
             </div>
             <h1 className="text-4xl font-bold mb-4">{category?.name || "Catégorie"}</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
