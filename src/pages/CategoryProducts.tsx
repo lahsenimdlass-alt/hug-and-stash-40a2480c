@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
-import { equipmentCategories, consumableCategories } from "@/data/categories";
+import { useCategories, Category } from "@/hooks/useCategories";
 import { useProductsPromotions } from "@/hooks/useProductPromotion";
 
 interface Product {
@@ -28,7 +28,8 @@ const CategoryProducts = () => {
   const [loading, setLoading] = useState(true);
 
   const isEquipment = location.pathname.startsWith("/equipements");
-  const categories = isEquipment ? equipmentCategories : consumableCategories;
+  const categoryType = isEquipment ? "equipment" : "consumable";
+  const { categories, loading: categoriesLoading } = useCategories(categoryType);
   const category = categories.find((c) => c.slug === slug);
   const backLink = isEquipment ? "/equipements" : "/consommables";
   const backLabel = isEquipment ? "Équipements" : "Consommables";
@@ -70,6 +71,8 @@ const CategoryProducts = () => {
     return null;
   };
 
+  const isPageLoading = loading || categoriesLoading;
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -85,10 +88,8 @@ const CategoryProducts = () => {
           </Link>
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-              {category?.iconImage ? (
-                <img src={category.iconImage} alt={category.name} className="w-8 h-8 object-contain" />
-              ) : category?.icon ? (
-                <category.icon className="w-8 h-8 text-primary" />
+              {category?.icon_url ? (
+                <img src={category.icon_url} alt={category.name} className="w-8 h-8 object-contain" />
               ) : null}
             </div>
             <h1 className="text-4xl font-bold mb-4">{category?.name || "Catégorie"}</h1>
@@ -98,7 +99,7 @@ const CategoryProducts = () => {
           </div>
         </div>
 
-        {loading ? (
+        {isPageLoading ? (
           <div className="flex items-center justify-center py-20">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>

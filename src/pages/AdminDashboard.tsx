@@ -11,7 +11,8 @@ import {
   Menu,
   X,
   Image,
-  LayoutDashboard
+  LayoutDashboard,
+  FolderTree
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +47,7 @@ const AdminDashboard = () => {
     { icon: Percent, label: "Promotions", path: "/admin/dashboard/promotions" },
     { icon: LayoutDashboard, label: "Slides Accueil", path: "/admin/dashboard/slides" },
     { icon: Image, label: "Images Catégories", path: "/admin/dashboard/category-images" },
+    { icon: FolderTree, label: "Sous-Catégories", path: "/admin/dashboard/categories" },
   ];
 
   const handleSignOut = async () => {
