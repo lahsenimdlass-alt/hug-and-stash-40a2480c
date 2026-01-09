@@ -32,7 +32,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Loader2 } from "lucide-react";
-import { equipmentCategories, consumableCategories } from "@/data/categories";
+import { useCategories } from "@/hooks/useCategories";
 import MultiImageUpload from "@/components/admin/MultiImageUpload";
 
 interface Product {
@@ -61,11 +61,14 @@ const AdminProducts = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [productImages, setProductImages] = useState<ProductImage[]>([]);
 
+  const { categories: equipmentCategories } = useCategories("equipment");
+  const { categories: consumableCategories } = useCategories("consumable");
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     price: "",
-    category: equipmentCategories[0]?.id || "radiographie",
+    category: "",
     stock_quantity: "0",
     is_active: true,
   });
@@ -96,7 +99,7 @@ const AdminProducts = () => {
       title: "",
       description: "",
       price: "",
-      category: equipmentCategories[0]?.id || "radiographie",
+      category: equipmentCategories[0]?.slug || consumableCategories[0]?.slug || "",
       stock_quantity: "0",
       is_active: true,
     });
@@ -213,13 +216,13 @@ const AdminProducts = () => {
     }
   };
 
-  // Build category labels from imported categories
+  // Build category labels from database categories
   const categoryLabels: Record<string, string> = {};
   equipmentCategories.forEach((cat) => {
-    categoryLabels[cat.id] = `Équipements - ${cat.name}`;
+    categoryLabels[cat.slug] = `Équipements - ${cat.name}`;
   });
   consumableCategories.forEach((cat) => {
-    categoryLabels[cat.id] = `Consommables - ${cat.name}`;
+    categoryLabels[cat.slug] = `Consommables - ${cat.name}`;
   });
 
   if (loading) {
@@ -276,7 +279,7 @@ const AdminProducts = () => {
                       <SelectGroup>
                         <SelectLabel>Équipements</SelectLabel>
                         {equipmentCategories.map((cat) => (
-                          <SelectItem key={cat.id} value={cat.id}>
+                          <SelectItem key={cat.id} value={cat.slug}>
                             {cat.name}
                           </SelectItem>
                         ))}
@@ -284,7 +287,7 @@ const AdminProducts = () => {
                       <SelectGroup>
                         <SelectLabel>Consommables</SelectLabel>
                         {consumableCategories.map((cat) => (
-                          <SelectItem key={cat.id} value={cat.id}>
+                          <SelectItem key={cat.id} value={cat.slug}>
                             {cat.name}
                           </SelectItem>
                         ))}
